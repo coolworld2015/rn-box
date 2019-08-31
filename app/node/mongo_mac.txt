@@ -1,0 +1,64 @@
+Create DB:
+
+sudo mkdir -p /data/db
+sudo chown -R `id -un` /data/db
+
+---------------------------------------
+Find DB:
+
+diagnostic.data
+
+---------------------------------------
+List of tasks:
+
+sudo lsof -iTCP -sTCP:LISTEN -n -P
+sudo kill <mongo_command_pid>
+
+---------------------------------------
+Run mongo:
+
+mongod
+
+---------------------------------------
+Shell:
+
+mongo shell
+show dbs
+
+use base09
+show collections
+db.getCollectionNames()
+
+db.createCollection("audits")
+db.audits.find()
+db.audits.count()
+db.audits.drop()
+
+db.users.insert({'id':'id','name':'name','pass':'pass','description':'description'})
+db.users.find()
+
+db.dropDatabase()
+
+---------------------------------------
+Get data from MongoLab:
+
+mongoexport -h ds011258.mongolab.com:11258 -d ui-base -c users -u admin -p admin -o users.json
+
+mongoexport -h ds011258.mongolab.com:11258 -d ui-base -c audits -u admin -p admin -o audits.json
+
+---------------------------------------
+Set localData from files:
+
+mongoimport --db base09 --collection users --file users.json
+mongoimport --db base09 --collection audits --file audits.json
+
+---------------------------------------
+Import/Export localData:
+
+mongoimport --db base09 --collection users --file users.json
+mongoexport --db base09 --collection users -o users1.json
+
+mongoimport --db base09 --collection audits --file audits.json
+mongoexport --db base09 --collection audits -o audits1.json
+
+

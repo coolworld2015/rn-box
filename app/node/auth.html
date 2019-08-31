@@ -1,0 +1,145 @@
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js"></script>
+
+<html ng-app="app">
+<div ui-view></div>
+
+<center>
+    <div ng-show="loading" style="font-size:25px; color:blue;">&nbsp
+        Loading...
+    </div>
+    <div ng-show="error" style="font-size:25px; color:red;">
+        Something went wrong
+    </div>
+</center>
+</html>
+
+<script>
+    (function() {
+        angular
+            .module('app', ['ui.router']);
+
+        angular
+            .module('app')
+            .config(routeConfig);
+
+        routeConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
+
+        function routeConfig($stateProvider, $urlRouterProvider) {
+            $urlRouterProvider.otherwise('/users');
+            $stateProvider
+                .state('users', {
+                    url: '/users',
+                    template: '<div><center>' +
+                        '<h1>Auth</h1>' +
+                        '<hr>' +
+                        '<button ng-click="collectionCtrl.getToken()">Get Token</button>&nbsp' +
+                        '<button ng-click="collectionCtrl.getUsers()">Get Users</button>&nbsp' +
+                        '<hr>' +
+                        '<div ng-if="collectionCtrl.items.length >= 1">' +
+                        '<table border=1>' +
+                        '<tr ng-repeat="item in collectionCtrl.items">' +
+
+                        '<td>{{item.id}}</td>' +
+                        '<td>{{item.name}}</td>' +
+                        '<td>{{item.pass}}</td>' +
+                        '<td>{{item.description}}</td>' +
+
+                        '</tr>' +
+                        '</table>' +
+                        '</div>' +
+
+                        '<div ng-if="collectionCtrl.items.length == 0">' +
+                        '<input type="text" style="width: 200px;" ng-model="collectionCtrl.name"><br><br>' +
+                        '<input type="password" style="width: 200px;" ng-model="collectionCtrl.pass"><br><br>' +
+                        '<input type="button" value="Login" ng-click="collectionCtrl.onLogin()">' +
+                        '</div>' +
+
+                        '</div>',
+                    controller: 'CollectionCtrl',
+                    controllerAs: 'collectionCtrl',
+                });
+        }
+
+        angular
+            .module('app')
+            .controller('CollectionCtrl', CollectionCtrl);
+
+        CollectionCtrl.$inject = ['$scope', '$state', '$rootScope', '$http'];
+
+        function CollectionCtrl($scope, $state, $rootScope, $http) {
+            var vm = this;
+            //var url = 'http://localhost:3000/';
+            var url = 'http://jwt-base.herokuapp.com/';
+
+            angular.extend(vm, {
+                init: init,
+                onLogin: onLogin,
+                getUsers: getUsers,
+                getToken: getToken,
+            });
+
+            init();
+
+            function init() {
+                vm.items = [];
+            }
+
+            function onLogin() {
+                $rootScope.loading = true;
+                $rootScope.error = false;
+
+                var item = {
+                    'name': vm.name,
+                    'pass': vm.pass,
+                    'description': navigator.userAgent,
+                };
+
+                $http.post(url + 'api/login', item)
+                    .then(function(results) {
+                        $rootScope.loading = false;
+                        $rootScope.access_token = results.data.token;
+                        vm.getUsers();
+                    })
+                    .catch(function(error) {
+                        $rootScope.loading = false;
+                        $rootScope.error = true;
+                    });
+            }
+
+            function getUsers() {
+                $rootScope.loading = true;
+                $rootScope.error = false;
+
+                $http.get(url + 'api/users/get',
+                    {
+                        headers: {'Authorization': $rootScope.access_token},
+                    })
+                    .then(function(results) {
+                        $rootScope.loading = false;
+                        vm.items = results.data;
+                    })
+                    .catch(function(error) {
+                        $rootScope.loading = false;
+                        $rootScope.error = true;
+                    });
+            }
+
+            function getToken() {
+                $rootScope.loading = true;
+                $rootScope.error = false;
+
+                $http.get(url + 'api/auth')
+                    .then(function(results) {
+                        $rootScope.loading = false;
+                        $rootScope.access_token = results.data;
+                    })
+                    .catch(function(error) {
+                        $rootScope.loading = false;
+                        $rootScope.error = true;
+                    });
+            }
+        }
+
+    })();
+</script>
