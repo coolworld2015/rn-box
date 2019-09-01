@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
  	itemWrap: {
 		flex: 1,
 		flexDirection: 'column',
-		flexWrap: 'wrap'
+		//flexWrap: 'wrap'
     },
     itemTextBold: {
         fontSize: 18,
