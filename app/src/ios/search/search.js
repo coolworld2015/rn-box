@@ -31,12 +31,6 @@ class Search extends Component {
         }
     }
 
-    componentDidMount() {
-        this.setState({
-            width: Dimensions.get('window').width
-        });
-    }
-
     clearSearch() {
         this.setState({
             searchQuery: '',
@@ -55,39 +49,34 @@ class Search extends Component {
 
         if (this.state.textSwitchBaseType === 'Music') {
             if (this.state.textSwitchBase === 'Search clips') {
-                this.props.navigator.push({
-                    index: 1,
-                    data: {
-                        searchQuery: this.state.searchQuery,
-                        searchType: 'musicVideo'
-                    }
-                })
+                appConfig.item = {
+                    searchQuery: this.state.searchQuery,
+                    searchType: 'musicVideo'
+                }
             } else {
-                this.props.navigator.push({
-                    index: 1,
-                    data: {
-                        searchQuery: this.state.searchQuery,
-                        searchType: 'music'
-                    }
-                })
+                appConfig.item = {
+                    searchQuery: this.state.searchQuery,
+                    searchType: 'music'
+                }
             }
+            this.props.navigation.navigate('searchMusicResults');
         } else {
             if (this.state.textSwitchBaseMovies === 'Search movies') {
-                this.props.navigator.push({
+                /*this.props.navigator.push({
                     index: 2,
                     data: {
                         searchQuery: this.state.searchQuery,
                         searchType: 'movie'
                     }
-                })
+                })*/
             } else {
-                this.props.navigator.push({
+                /*this.props.navigator.push({
                     index: 2,
                     data: {
                         searchQuery: this.state.searchQuery,
                         searchType: 'tvShow'
                     }
-                })
+                })*/
             }
         }
     }

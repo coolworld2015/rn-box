@@ -17,16 +17,9 @@ import {
 
 import ListView from 'deprecated-react-native-listview';
 
-class SearchResultsMusic extends Component {
+class SearchMusicResults extends Component {
     constructor(props) {
         super(props);
-
-        /*		BackAndroid.addEventListener('hardwareBackPress', () => {
-                    if (this.props.navigator) {
-                        this.props.navigator.pop();
-                    }
-                    return true;
-                });	*/
 
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
@@ -35,22 +28,15 @@ class SearchResultsMusic extends Component {
         this.state = {
             dataSource: ds.cloneWithRows([]),
             searchQuery: '',
-			width: Dimensions.get('window').width
+            width: Dimensions.get('window').width,
+            searchType: appConfig.item.searchType,
+            searchQueryHttp: appConfig.item.searchQuery,
+            showProgress: true,
+            resultsCount: 0,
+            recordsCount: 15,
+            positionY: 0,
+            refreshing: false
         };
-
-        if (props.data) {
-            this.state = {
-                dataSource: ds.cloneWithRows([]),
-                searchType: props.data.searchType,
-                searchQueryHttp: props.data.searchQuery,
-                showProgress: true,
-                resultsCount: 0,
-                recordsCount: 15,
-                positionY: 0,
-                searchQuery: '',
-                refreshing: false
-            }
-        }
 
         this.getItems();
     }
@@ -95,10 +81,8 @@ class SearchResultsMusic extends Component {
     }
 
     pressRow(rowData) {
-        this.props.navigator.push({
-            index: 11,
-            data: rowData
-        });
+        appConfig.item = rowData;
+        this.props.navigation.navigate('searchMusicDetails');
     }
 
     renderRow(rowData) {
@@ -196,8 +180,8 @@ class SearchResultsMusic extends Component {
         });
     }
 
-    goBack(rowData) {
-        this.props.navigator.pop();
+    goBack() {
+        this.props.navigation.goBack();
     }
 
     render() {
@@ -440,4 +424,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SearchResultsMusic;
+export default SearchMusicResults;

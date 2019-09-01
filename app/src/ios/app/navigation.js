@@ -3,9 +3,15 @@ import {createBottomTabNavigator, createStackNavigator, createAppContainer} from
 import {Image} from 'react-native';
 
 import Search from '../search/search';
+import searchMusicResults from '../search/searchMusicResults';
+import searchMusicDetails from '../search/searchMusicDetails';
+import playTrack from './playTrack';
 
 const SearchTab = createStackNavigator({
     Search,
+    searchMusicResults,
+    searchMusicDetails,
+    playTrack
 });
 
 const TabNavigator = createBottomTabNavigator({
