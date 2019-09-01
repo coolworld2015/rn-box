@@ -12,10 +12,10 @@ import {
     ActivityIndicator,
     TextInput,
     AsyncStorage,
-    Alert,
+    Alert
 } from 'react-native';
 
-class SearchMusicDetails extends Component {
+class SearchMoviesDetails extends Component {
     constructor(props) {
         super(props);
 
@@ -25,21 +25,21 @@ class SearchMusicDetails extends Component {
     }
 
     localStorageInsert() {
-        var music = [];
+        var movies = [];
 
-        AsyncStorage.getItem('rn-box.music')
+        AsyncStorage.getItem('rn-box.movies')
             .then(req => JSON.parse(req))
             .then(json => {
-                music = [].concat(json);
-                music.push(this.state.pushEvent);
+                movies = [].concat(json);
+                movies.push(this.state.pushEvent);
 
-                if (music[0] == null) {
-                    music.shift()
+                if (movies[0] == null) {
+                    movies.shift()
                 } // Hack !!!
 
-                AsyncStorage.setItem('rn-box.music', JSON.stringify(music))
+                AsyncStorage.setItem('rn-box.movies', JSON.stringify(movies))
                     .then(json => {
-                            appConfig.music.refresh = true;
+                            appConfig.movies.refresh = true;
                             this.props.navigator.pop();
                         }
                     );
@@ -48,16 +48,16 @@ class SearchMusicDetails extends Component {
             .catch(error => console.log(error));
     }
 
-    playTrack() {
+	playTrack() {
 		appConfig.item = {
 			name: this.state.pushEvent.trackName,
 			url: this.state.pushEvent.previewUrl
 		};
 		this.props.navigation.navigate('playTrack');
-    }
+	}
 
     goBack() {
-		this.props.navigation.goBack();
+        this.props.navigation.goBack();
     }
 
     render() {
@@ -68,7 +68,7 @@ class SearchMusicDetails extends Component {
                 image = <Image
                     source={{uri: this.state.pushEvent.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg')}}
                     style={{
-                        height: 300,
+                        height: 400,
                         width: 300,
                         borderRadius: 10,
                         margin: 5
@@ -142,20 +142,20 @@ class SearchMusicDetails extends Component {
                             {this.state.pushEvent.trackName}
                         </Text>
 
-                        <Text style={styles.itemTextSmallBold}>
-                            {this.state.pushEvent.collectionName}
+                        <Text style={styles.itemText}>
+                            {this.state.pushEvent.releaseDate.split('-')[0]}
                         </Text>
 
                         <Text style={styles.itemText}>
                             {this.state.pushEvent.primaryGenreName}
                         </Text>
 
-                        <Text style={styles.itemText}>
-                            {this.state.pushEvent.releaseDate.split('-')[0]}
-                        </Text>
-
                         <Text style={styles.itemTextSmallBold}>
                             {this.state.pushEvent.artistName}
+                        </Text>
+
+                        <Text style={styles.itemTextDescription}>
+                            {this.state.pushEvent.longDescription}
                         </Text>
 
                         <TouchableHighlight
@@ -174,94 +174,101 @@ class SearchMusicDetails extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        backgroundColor: 'white'
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        //backgroundColor: '#48BBEC',
-        backgroundColor: 'darkblue',
-        borderWidth: 0,
-        borderColor: 'whitesmoke'
-    },
-    textSmall: {
-        fontSize: 16,
-        textAlign: 'center',
-        margin: 14,
-        fontWeight: 'bold',
-        color: 'white'
-    },
-    textLarge: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-        marginRight: 20,
-        fontWeight: 'bold',
-        color: 'white'
-    },
-    form: {
-        flex: 1,
-        padding: 10,
-        justifyContent: 'flex-start',
-        paddingBottom: 130,
-        backgroundColor: 'white'
-    },
-    itemWrap: {
-        flex: 1,
-        flexDirection: 'column',
-        //flexWrap: 'wrap'
-    },
-    itemTextBold: {
-        fontSize: 25,
-        textAlign: 'center',
-        margin: 7,
-        fontWeight: 'bold',
-        color: 'black',
-/*        fontFamily: 'Cursive',
-        fontStyle: 'italic'*/
-    },
-    itemText: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 5,
-        marginLeft: 2,
-        color: 'black'
-    },
-    itemTextSmallBold: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 7,
-        marginLeft: 2,
-        fontWeight: 'bold',
-        color: 'black'
-    },
-    button: {
-        height: 50,
-        //backgroundColor: '#48BBEC',
-        backgroundColor: 'darkblue',
-        borderColor: '#48BBEC',
-        alignSelf: 'stretch',
-        marginTop: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 5
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 20,
-        fontWeight: 'bold'
-    },
-    loader: {
-        marginTop: 20
-    },
-    error: {
-        color: 'red',
-        paddingTop: 10,
-        textAlign: 'center'
-    }
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+		backgroundColor: 'white'
+	},
+	header: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		//backgroundColor: '#48BBEC',
+		backgroundColor: 'darkblue',
+		borderWidth: 0,
+		borderColor: 'whitesmoke'
+	},
+	textSmall: {
+		fontSize: 16,
+		textAlign: 'center',
+		margin: 14,
+		fontWeight: 'bold',
+		color: 'white'
+	},
+	textLarge: {
+		fontSize: 20,
+		textAlign: 'center',
+		margin: 10,
+		marginRight: 20,
+		fontWeight: 'bold',
+		color: 'white'
+	},
+	form: {
+		flex: 1,
+		padding: 10,
+		justifyContent: 'flex-start',
+		paddingBottom: 130,
+		backgroundColor: 'white'
+	},
+	itemWrap: {
+		flex: 1,
+		flexDirection: 'column',
+		//flexWrap: 'wrap'
+	},
+	itemTextBold: {
+		fontSize: 25,
+		textAlign: 'center',
+		margin: 7,
+		fontWeight: 'bold',
+		color: 'black',
+		/*        fontFamily: 'Cursive',
+                fontStyle: 'italic'*/
+	},
+	itemText: {
+		fontSize: 20,
+		textAlign: 'center',
+		margin: 5,
+		marginLeft: 2,
+		color: 'black'
+	},
+    itemTextDescription: {
+		fontSize: 20,
+		textAlign: 'justify',
+		margin: 5,
+		marginLeft: 2,
+		color: 'black'
+	},
+	itemTextSmallBold: {
+		fontSize: 20,
+		textAlign: 'center',
+		margin: 7,
+		marginLeft: 2,
+		fontWeight: 'bold',
+		color: 'black'
+	},
+	button: {
+		height: 50,
+		//backgroundColor: '#48BBEC',
+		backgroundColor: 'darkblue',
+		borderColor: '#48BBEC',
+		alignSelf: 'stretch',
+		marginTop: 10,
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 5
+	},
+	buttonText: {
+		color: '#fff',
+		fontSize: 20,
+		fontWeight: 'bold'
+	},
+	loader: {
+		marginTop: 20
+	},
+	error: {
+		color: 'red',
+		paddingTop: 10,
+		textAlign: 'center'
+	}
 });
 
-export default SearchMusicDetails;
+export default SearchMoviesDetails;

@@ -5,12 +5,17 @@ import {Image} from 'react-native';
 import Search from '../search/search';
 import searchMusicResults from '../search/searchMusicResults';
 import searchMusicDetails from '../search/searchMusicDetails';
+
+import searchMoviesResults from '../search/searchMoviesResults';
+import searchMoviesDetails from '../search/searchMoviesDetails';
 import playTrack from './playTrack';
 
 const SearchTab = createStackNavigator({
     Search,
     searchMusicResults,
     searchMusicDetails,
+    searchMoviesResults,
+    searchMoviesDetails,
     playTrack
 });
 

@@ -20,10 +20,10 @@ class Search extends Component {
         this.state = {
             showProgress: false,
             eventSwitchTitle: true,
-            eventSwitchBase: false,
+            eventSwitchBase: true,
             eventSwitchBaseMovies: true,
             eventSwitchBaseType: false,
-            textSwitchBase: 'Search music',
+            textSwitchBase: 'Search clips',
             textSwitchBaseMovies: 'Search movies',
             textSwitchBaseType: 'Music',
             bugANDROID: '',
@@ -62,22 +62,17 @@ class Search extends Component {
             this.props.navigation.navigate('searchMusicResults');
         } else {
             if (this.state.textSwitchBaseMovies === 'Search movies') {
-                /*this.props.navigator.push({
-                    index: 2,
-                    data: {
-                        searchQuery: this.state.searchQuery,
-                        searchType: 'movie'
-                    }
-                })*/
+                appConfig.item = {
+                    searchQuery: this.state.searchQuery,
+                    searchType: 'movie'
+                }
             } else {
-                /*this.props.navigator.push({
-                    index: 2,
-                    data: {
-                        searchQuery: this.state.searchQuery,
-                        searchType: 'tvShow'
-                    }
-                })*/
+                appConfig.item = {
+                    searchQuery: this.state.searchQuery,
+                    searchType: 'tvShow'
+                }
             }
+            this.props.navigation.navigate('searchMoviesResults');
         }
     }
 
@@ -179,8 +174,7 @@ class Search extends Component {
                         <View>
                             <TouchableHighlight
                                 onPress={() => this.goBack()}
-                                underlayColor='darkblue'
-                            >
+                                underlayColor='darkblue'>
                                 <View>
                                     <Text style={styles.textSmall}>
                                     </Text>
@@ -199,8 +193,7 @@ class Search extends Component {
                         <View>
                             <TouchableHighlight
                                 onPress={() => this.clearSearch()}
-                                underlayColor='darkblue'
-                            >
+                                underlayColor='darkblue'>
                                 <View>
                                     <Text style={styles.textSmall}>
                                         Clear
@@ -227,8 +220,7 @@ class Search extends Component {
                                                 eventSwitchBaseType: value
                                             });
                                         }}
-                                        value={this.state.eventSwitchBaseType}
-                                    />
+                                        value={this.state.eventSwitchBaseType}/>
                                 </View>
                             </View>
 
@@ -247,8 +239,8 @@ class Search extends Component {
                                         width: this.state.width * .94,
                                         fontSize: 18,
                                         color: 'darkblue',
-                                        paddingTop: 6,
-                                        marginLeft: -8
+                                        paddingTop: 0,
+                                        marginLeft: 5
                                     }}
                                     placeholderTextColor="darkblue"
                                     placeholder="Search here">
@@ -334,7 +326,7 @@ const styles = StyleSheet.create({
     },
     switchItemText: {
         fontSize: 18,
-        marginTop: 10,
+        marginTop: 14,
         margin: 10,
         color: 'darkblue'
     },

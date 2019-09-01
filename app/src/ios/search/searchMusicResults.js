@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5FCFF'
     },
     img: {
-        height: 95,
+        height: 100,
         width: 90,
         borderRadius: 10,
         margin: 10
@@ -350,7 +350,8 @@ const styles = StyleSheet.create({
         color: 'black'
     },
     textItem: {
-        color: 'black'
+        color: 'black',
+        margin: 2
     },
     container: {
         flex: 1,

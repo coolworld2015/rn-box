@@ -50,7 +50,7 @@ class PlayTrack extends Component {
                        }}
                        style={styles.backgroundVideo}/>
 
-                <View style={styles.header}>
+               {/* <View style={styles.header}>
                     <View>
                         <TouchableHighlight
                             onPress={() => this.goBack()}
@@ -75,7 +75,7 @@ class PlayTrack extends Component {
                             </Text>
                         </TouchableHighlight>
                     </View>
-                </View>
+                </View>*/}
 
             </View>
 
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     },
     backgroundVideo: {
         position: 'absolute',
-        top: 70,
+        top: 0,
         left: 0,
         bottom: 0,
         right: 0,

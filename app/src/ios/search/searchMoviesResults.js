@@ -19,16 +19,16 @@ import {
 
 import ListView from 'deprecated-react-native-listview';
 
-class SearchResultsMovies extends Component {
+class SearchMoviesResults extends Component {
     constructor(props) {
         super(props);
 
-/*        BackAndroid.addEventListener('hardwareBackPress', () => {
-            if (this.props.navigator) {
-                this.props.navigator.pop();
-            }
-            return true;
-        });*/
+        /*        BackAndroid.addEventListener('hardwareBackPress', () => {
+                    if (this.props.navigator) {
+                        this.props.navigator.pop();
+                    }
+                    return true;
+                });*/
 
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
@@ -37,23 +37,16 @@ class SearchResultsMovies extends Component {
         this.state = {
             dataSource: ds.cloneWithRows([]),
             searchQuery: '',
-            width: Dimensions.get('window').width
-        }
+            width: Dimensions.get('window').width,
+            searchType: appConfig.item.searchType,
+            searchQueryHttp: appConfig.item.searchQuery,
+            showProgress: true,
+            resultsCount: 0,
+            recordsCount: 15,
+            positionY: 0,
+            refreshing: false
+        };
 
-        if (props.data) {
-            this.state = {
-                dataSource: ds.cloneWithRows([]),
-                searchType: props.data.searchType,
-                searchQueryHttp: props.data.searchQuery,
-                showProgress: true,
-                resultsCount: 0,
-                recordsCount: 15,
-                positionY: 0,
-                searchQuery: '',
-                refreshing: false
-            }
-        }
-        ;
     }
 
     componentDidMount() {
@@ -103,10 +96,8 @@ class SearchResultsMovies extends Component {
     }
 
     pressRow(rowData) {
-        this.props.navigator.push({
-            index: 22,
-            data: rowData
-        });
+        appConfig.item = rowData;
+        this.props.navigation.navigate('searchMoviesDetails');
     }
 
     renderRow(rowData) {
@@ -126,7 +117,7 @@ class SearchResultsMovies extends Component {
                         </Text>
 
                         <Text style={styles.textItem}>
-                            {rowData.releaseDate.split('-')[0]}
+                            {rowData.primaryGenreName}
                         </Text>
 
                         <Text style={styles.textItem}>
@@ -134,7 +125,7 @@ class SearchResultsMovies extends Component {
                         </Text>
 
                         <Text style={styles.textItem}>
-                            {rowData.primaryGenreName}
+                            {rowData.releaseDate.split('-')[0]}
                         </Text>
 
                         <Text style={styles.textItemBold}>
@@ -204,8 +195,8 @@ class SearchResultsMovies extends Component {
         });
     }
 
-    goBack(rowData) {
-        this.props.navigator.pop();
+    goBack() {
+        this.props.navigation.goBack();
     }
 
     render() {
@@ -359,7 +350,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5FCFF'
     },
     img: {
-        height: 95,
+        height: 100,
         width: 90,
         borderRadius: 10,
         margin: 10
@@ -374,7 +365,8 @@ const styles = StyleSheet.create({
         color: 'black'
     },
     textItem: {
-        color: 'black'
+        color: 'black',
+        margin: 2
     },
     container: {
         flex: 1,
@@ -448,4 +440,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SearchResultsMovies;
+export default SearchMoviesResults;
