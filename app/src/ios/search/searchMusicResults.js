@@ -102,15 +102,15 @@ class SearchMusicResults extends Component {
                         </Text>
 
                         <Text style={styles.textItem}>
-                            {rowData.releaseDate.split('-')[0]}
-                        </Text>
-
-                        <Text style={styles.textItem}>
-                            {rowData.country}
+                            {rowData.collectionName}
                         </Text>
 
                         <Text style={styles.textItem}>
                             {rowData.primaryGenreName}
+                        </Text>
+
+                        <Text style={styles.textItem}>
+                            {rowData.releaseDate.split('-')[0]}
                         </Text>
 
                         <Text style={styles.textItemBold}>

@@ -149,22 +149,21 @@ class SearchMusicDetails extends Component {
                             {this.state.pushEvent.trackName}
                         </Text>
 
-                        <Text style={styles.itemText}>
-                            {this.state.pushEvent.releaseDate.split('-')[0]}
-                        </Text>
-
-                        <Text style={styles.itemText}>
-                            {this.state.pushEvent.country}
+                        <Text style={styles.itemTextSmallBold}>
+                            {this.state.pushEvent.collectionName}
                         </Text>
 
                         <Text style={styles.itemText}>
                             {this.state.pushEvent.primaryGenreName}
                         </Text>
 
+                        <Text style={styles.itemText}>
+                            {this.state.pushEvent.releaseDate.split('-')[0]}
+                        </Text>
+
                         <Text style={styles.itemTextSmallBold}>
                             {this.state.pushEvent.artistName}
                         </Text>
-
 
                         <TouchableHighlight
                             onPress={() => this.playTrack()}
@@ -223,23 +222,25 @@ const styles = StyleSheet.create({
         //flexWrap: 'wrap'
     },
     itemTextBold: {
-        fontSize: 18,
+        fontSize: 25,
         textAlign: 'center',
-        margin: 5,
+        margin: 7,
         fontWeight: 'bold',
-        color: 'black'
+        color: 'black',
+/*        fontFamily: 'Cursive',
+        fontStyle: 'italic'*/
     },
     itemText: {
-        fontSize: 14,
+        fontSize: 20,
         textAlign: 'center',
-        margin: 3,
+        margin: 5,
         marginLeft: 2,
         color: 'black'
     },
     itemTextSmallBold: {
-        fontSize: 14,
+        fontSize: 20,
         textAlign: 'center',
-        margin: 3,
+        margin: 7,
         marginLeft: 2,
         fontWeight: 'bold',
         color: 'black'
