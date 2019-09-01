@@ -10,47 +10,56 @@ import {
     ScrollView,
     ActivityIndicator,
     TextInput,
-    BackHandler,
+    AsyncStorage,
+    Alert,
     Image,
     Dimensions,
-    RefreshControl
+    RefreshControl,
 } from 'react-native';
 
 import ListView from 'deprecated-react-native-listview';
 
-class SearchResults extends Component {
+class SearchResultsMovies extends Component {
     constructor(props) {
         super(props);
 
-        BackHandler.addEventListener('hardwareBackPress', () => {
+/*        BackAndroid.addEventListener('hardwareBackPress', () => {
             if (this.props.navigator) {
                 this.props.navigator.pop();
             }
             return true;
-        });
+        });*/
 
-        let ds = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 !== r2
+        var ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 != r2
         });
 
         this.state = {
-            dataSource: ds.cloneWithRows([])
-        };
+            dataSource: ds.cloneWithRows([]),
+            searchQuery: '',
+            width: Dimensions.get('window').width
+        }
 
-        if (props) {
+        if (props.data) {
             this.state = {
                 dataSource: ds.cloneWithRows([]),
-                searchQueryHttp: props.navigation.state.params.data.searchQuery,
-                searchType: props.navigation.state.params.data.searchType,
+                searchType: props.data.searchType,
+                searchQueryHttp: props.data.searchQuery,
                 showProgress: true,
                 resultsCount: 0,
                 recordsCount: 15,
                 positionY: 0,
                 searchQuery: '',
                 refreshing: false
-            };
+            }
         }
+        ;
+    }
 
+    componentDidMount() {
+        this.setState({
+            width: Dimensions.get('window').width
+        });
         this.getItems();
     }
 
@@ -63,31 +72,23 @@ class SearchResults extends Component {
             searchQuery: ''
         });
 
-        let webUrl;
-        if (this.state.searchType === 'Search by phone') {
-            webUrl = 'api/items/findByPhone/';
-        } else {
-            webUrl = 'api/items/findByName/';
-        }
-
-        fetch(appConfig.url + webUrl + this.state.searchQueryHttp, {
+        fetch('https://itunes.apple.com/search?media='
+            + this.state.searchType + '&term='
+            + this.state.searchQueryHttp, {
             method: 'get',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': appConfig.access_token
+                'Content-Type': 'application/json'
             }
         })
             .then((response) => response.json())
             .then((responseData) => {
                 this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(responseData.sort(this.sort).slice(0, 15)),
-                    resultsCount: responseData.length,
-                    responseData: responseData.sort(this.sort),
-                    filteredItems: responseData.sort(this.sort),
-                    refreshing: false
+                    dataSource: this.state.dataSource.cloneWithRows(responseData.results.slice(0, 5)),
+                    resultsCount: responseData.results.length,
+                    responseData: responseData.results,
+                    filteredItems: responseData.results
                 });
-
             })
             .catch((error) => {
                 this.setState({
@@ -101,30 +102,45 @@ class SearchResults extends Component {
             });
     }
 
-    sort(a, b) {
-        let nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
-        if (nameA < nameB) {
-            return -1;
-        }
-        if (nameA > nameB) {
-            return 1;
-        }
-        return 0;
-    }
-
-    showDetails(rowData) {
-        this.props.navigation.navigate('PhoneDetails', {data: rowData});
+    pressRow(rowData) {
+        this.props.navigator.push({
+            index: 22,
+            data: rowData
+        });
     }
 
     renderRow(rowData) {
         return (
             <TouchableHighlight
-                onPress={() => this.showDetails(rowData)}
-                underlayColor='#ddd'>
-                <View style={styles.row}>
-                    <Text style={styles.rowText}>
-                        {rowData.name} - {rowData.phone}
-                    </Text>
+                onPress={() => this.pressRow(rowData)}
+                underlayColor='#ddd'
+            >
+                <View style={styles.imgsList}>
+                    <Image
+                        source={{uri: rowData.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg')}}
+                        style={styles.img}
+                    />
+                    <View style={styles.textBlock}>
+                        <Text style={styles.textItemBold}>
+                            {rowData.trackName}
+                        </Text>
+
+                        <Text style={styles.textItem}>
+                            {rowData.releaseDate.split('-')[0]}
+                        </Text>
+
+                        <Text style={styles.textItem}>
+                            {rowData.country}
+                        </Text>
+
+                        <Text style={styles.textItem}>
+                            {rowData.primaryGenreName}
+                        </Text>
+
+                        <Text style={styles.textItemBold}>
+                            {rowData.artistName}
+                        </Text>
+                    </View>
                 </View>
             </TouchableHighlight>
         );
@@ -133,20 +149,6 @@ class SearchResults extends Component {
     refreshData(event) {
         if (this.state.showProgress === true) {
             return;
-        }
-
-        if (event.nativeEvent.contentOffset.y <= -150) {
-            this.setState({
-                showProgress: true,
-                resultsCount: 0,
-                recordsCount: 15,
-                positionY: 0,
-                searchQuery: ''
-            });
-
-            setTimeout(() => {
-                this.findItems();
-            }, 300);
         }
 
         if (this.state.filteredItems === undefined) {
@@ -158,41 +160,37 @@ class SearchResults extends Component {
         positionY = this.state.positionY;
         items = this.state.filteredItems.slice(0, recordsCount);
 
-        if (event.nativeEvent.contentOffset.y >= positionY - 10) {
+        if (event.nativeEvent.contentOffset.y >= positionY) {
             this.setState({
                 dataSource: this.state.dataSource.cloneWithRows(items),
                 recordsCount: recordsCount + 10,
-                positionY: positionY + 500
+                positionY: positionY + 400
             });
         }
     }
 
     onChangeText(text) {
-        if (this.state.dataSource === undefined) {
+        if (this.state.responseData == undefined) {
             return;
         }
-
-        let arr = [].concat(this.state.responseData);
-        let items = arr.filter((el) => el.phone.toLowerCase().indexOf(text.toLowerCase()) !== -1);
+        var arr = [].concat(this.state.responseData);
+        var items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) >= 0);
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(items),
             resultsCount: items.length,
             filteredItems: items,
             searchQuery: text
-        });
+        })
     }
 
     refreshDataAndroid() {
         this.setState({
-            showProgress: true,
-            resultsCount: 0
+            showProgress: true
         });
 
-        this.getItems();
-    }
-
-    goBack() {
-        this.props.navigation.goBack();
+        setTimeout(() => {
+            this.getItems()
+        }, 1000);
     }
 
     clearSearchQuery() {
@@ -204,6 +202,10 @@ class SearchResults extends Component {
             recordsCount: 15,
             searchQuery: ''
         });
+    }
+
+    goBack(rowData) {
+        this.props.navigator.pop();
     }
 
     render() {
@@ -242,30 +244,29 @@ class SearchResults extends Component {
                     <View>
                         <TouchableHighlight
                             onPress={() => this.goBack()}
-                            underlayColor='darkblue'>
-                            <View>
-                                <Text style={styles.textSmall}>
-                                    Back
-                                </Text>
-                            </View>
+                            underlayColor='darkblue'
+                        >
+                            <Text style={styles.textSmall}>
+                                Back
+                            </Text>
+                        </TouchableHighlight>
+                    </View>
+                    <View style={styles.itemWrap}>
+                        <TouchableHighlight
+                            underlayColor='darkblue'
+                        >
+                            <Text style={styles.textLarge}>
+                                {this.state.searchQueryHttp}
+                            </Text>
                         </TouchableHighlight>
                     </View>
                     <View>
-                        <TouchableWithoutFeedback>
-                            <View>
-                                <Text style={styles.textLarge}>
-                                    {this.state.searchQueryHttp}
-                                </Text>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </View>
-                    <View>
-                        <TouchableWithoutFeedback>
-                            <View>
-                                <Text style={styles.textSmall}>
-                                </Text>
-                            </View>
-                        </TouchableWithoutFeedback>
+                        <TouchableHighlight
+                            underlayColor='darkblue'
+                        >
+                            <Text style={styles.textSmall}>
+                            </Text>
+                        </TouchableHighlight>
                     </View>
                 </View>
 
@@ -274,14 +275,31 @@ class SearchResults extends Component {
                         <TextInput
                             underlineColorAndroid='rgba(0,0,0,0)'
                             onChangeText={this.onChangeText.bind(this)}
-                            style={styles.searchLarge}
+                            style={{
+                                height: 45,
+                                padding: 5,
+                                backgroundColor: 'white',
+                                borderWidth: 3,
+                                borderColor: 'white',
+                                borderRadius: 0,
+                                width: Dimensions.get('window').width * .90,
+                            }}
                             value={this.state.searchQuery}
                             placeholder="Search here">
                         </TextInput>
                     </View>
-                    <View style={styles.searchSmall}>
+                    <View style={{
+                        height: 45,
+                        backgroundColor: 'white',
+                        borderWidth: 3,
+                        borderColor: 'white',
+                        marginLeft: -10,
+                        paddingLeft: 5,
+                        width: Dimensions.get('window').width * .10,
+                    }}>
                         <TouchableWithoutFeedback
-                            onPress={() => this.clearSearchQuery()}>
+                            onPress={() => this.clearSearchQuery()}
+                        >
                             <View>
                                 {image}
                             </View>
@@ -293,16 +311,15 @@ class SearchResults extends Component {
 
                 {loader}
 
-                <ScrollView
-                    onScroll={this.refreshData.bind(this)}
-                    scrollEventThrottle={16}
-                    refreshControl={
-                        <RefreshControl
-                            enabled={true}
-                            refreshing={this.state.refreshing}
-                            onRefresh={this.refreshDataAndroid.bind(this)}
-                        />
-                    }>
+                <ScrollView onScroll={this.refreshData.bind(this)} scrollEventThrottle={16}
+                            refreshControl={
+                                <RefreshControl
+                                    enabled={true}
+                                    refreshing={this.state.refreshing}
+                                    onRefresh={this.refreshDataAndroid.bind(this)}
+                                />
+                            }
+                >
                     <ListView
                         enableEmptySections={true}
                         dataSource={this.state.dataSource}
@@ -312,49 +329,65 @@ class SearchResults extends Component {
 
                 <View>
                     <Text style={styles.countFooter}>
-                        Records: {this.state.resultsCount.toString()}
+                        Records: {this.state.resultsCount}
                     </Text>
                 </View>
             </View>
-        );
+        )
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
+    imgsList: {
         flex: 1,
-        justifyContent: 'center',
-        backgroundColor: 'white'
+        flexDirection: 'row',
+        padding: 0,
+        alignItems: 'center',
+        borderColor: '#D7D7D7',
+        borderBottomWidth: 1,
+        backgroundColor: '#fff'
     },
     iconForm: {
         flexDirection: 'row',
         borderColor: 'darkblue',
         borderWidth: 3
     },
+    countHeader: {
+        fontSize: 16,
+        textAlign: 'center',
+        padding: 15,
+        backgroundColor: '#F5FCFF'
+    },
+    img: {
+        height: 95,
+        width: 90,
+        borderRadius: 10,
+        margin: 10
+    },
+    textBlock: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between'
+    },
+    textItemBold: {
+        fontWeight: 'bold',
+        color: 'black'
+    },
+    textItem: {
+        color: 'black'
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: 'white'
+    },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderWidth: 0,
         borderColor: 'whitesmoke'
-    },
-    searchLarge: {
-        height: 45,
-        padding: 5,
-        backgroundColor: 'white',
-        borderWidth: 3,
-        borderColor: 'white',
-        borderRadius: 0,
-        width: Dimensions.get('window').width * .90
-    },
-    searchSmall: {
-        height: 45,
-        backgroundColor: 'white',
-        borderWidth: 3,
-        borderColor: 'white',
-        marginLeft: -5,
-        paddingLeft: 5,
-        width: Dimensions.get('window').width * .10
     },
     textSmall: {
         fontSize: 16,
@@ -367,7 +400,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         margin: 10,
-        marginRight: 60,
+        marginRight: 40,
         fontWeight: 'bold',
         color: 'white'
     },
@@ -399,6 +432,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 10,
         borderColor: '#D7D7D7',
+        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         color: 'white',
         fontWeight: 'bold'
@@ -414,4 +448,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SearchResults;
+export default SearchResultsMovies;

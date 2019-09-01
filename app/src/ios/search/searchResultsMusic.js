@@ -11,29 +11,46 @@ import {
     ActivityIndicator,
     TextInput,
     Image,
-    Dimensions
+    Dimensions,
+    RefreshControl,
 } from 'react-native';
 
 import ListView from 'deprecated-react-native-listview';
 
-class Phones extends Component {
+class SearchResultsMusic extends Component {
     constructor(props) {
         super(props);
 
-        let ds = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 !== r2
+        /*		BackAndroid.addEventListener('hardwareBackPress', () => {
+                    if (this.props.navigator) {
+                        this.props.navigator.pop();
+                    }
+                    return true;
+                });	*/
+
+        var ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 != r2
         });
 
         this.state = {
             dataSource: ds.cloneWithRows([]),
-            showProgress: true,
-            serverError: false,
-            resultsCount: 0,
-            recordsCount: 15,
-            positionY: 0,
             searchQuery: '',
-            refreshing: false
+			width: Dimensions.get('window').width
         };
+
+        if (props.data) {
+            this.state = {
+                dataSource: ds.cloneWithRows([]),
+                searchType: props.data.searchType,
+                searchQueryHttp: props.data.searchQuery,
+                showProgress: true,
+                resultsCount: 0,
+                recordsCount: 15,
+                positionY: 0,
+                searchQuery: '',
+                refreshing: false
+            }
+        }
 
         this.getItems();
     }
@@ -47,22 +64,22 @@ class Phones extends Component {
             searchQuery: ''
         });
 
-        fetch(appConfig.url + 'api/items/get', {
+        fetch('https://itunes.apple.com/search?media='
+            + this.state.searchType + '&term='
+            + this.state.searchQueryHttp, {
             method: 'get',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': appConfig.access_token
+                'Content-Type': 'application/json'
             }
         })
             .then((response) => response.json())
             .then((responseData) => {
                 this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(responseData.sort(this.sort).slice(0, 15)),
-                    resultsCount: responseData.length,
-                    responseData: responseData,
-                    filteredItems: responseData,
-                    refreshing: false
+                    dataSource: this.state.dataSource.cloneWithRows(responseData.results.slice(0, 5)),
+                    resultsCount: responseData.results.length,
+                    responseData: responseData.results,
+                    filteredItems: responseData.results
                 });
             })
             .catch((error) => {
@@ -77,34 +94,45 @@ class Phones extends Component {
             });
     }
 
-    sort(a, b) {
-        let nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
-        if (nameA < nameB) {
-            return -1;
-        }
-        if (nameA > nameB) {
-            return 1;
-        }
-        return 0;
-    }
-
-    showDetails(rowData) {
-        this.props.navigation.navigate('PhoneDetails', {data: rowData});
-    }
-
-    goSearch() {
-        this.props.navigation.navigate('Search');
+    pressRow(rowData) {
+        this.props.navigator.push({
+            index: 11,
+            data: rowData
+        });
     }
 
     renderRow(rowData) {
         return (
             <TouchableHighlight
-                onPress={() => this.showDetails(rowData)}
-                underlayColor='#ddd'>
-                <View style={styles.row}>
-                    <Text style={styles.rowText}>
-                        {rowData.name} - {rowData.phone}
-                    </Text>
+                onPress={() => this.pressRow(rowData)}
+                underlayColor='#ddd'
+            >
+                <View style={styles.imgsList}>
+                    <Image
+                        source={{uri: rowData.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg')}}
+                        style={styles.img}
+                    />
+                    <View style={styles.textBlock}>
+                        <Text style={styles.textItemBold}>
+                            {rowData.trackName}
+                        </Text>
+
+                        <Text style={styles.textItem}>
+                            {rowData.releaseDate.split('-')[0]}
+                        </Text>
+
+                        <Text style={styles.textItem}>
+                            {rowData.country}
+                        </Text>
+
+                        <Text style={styles.textItem}>
+                            {rowData.primaryGenreName}
+                        </Text>
+
+                        <Text style={styles.textItemBold}>
+                            {rowData.artistName}
+                        </Text>
+                    </View>
                 </View>
             </TouchableHighlight>
         );
@@ -113,20 +141,6 @@ class Phones extends Component {
     refreshData(event) {
         if (this.state.showProgress === true) {
             return;
-        }
-
-        if (event.nativeEvent.contentOffset.y <= -100) {
-            this.setState({
-                showProgress: true,
-                resultsCount: 0,
-                recordsCount: 25,
-                positionY: 0,
-                searchQuery: ''
-            });
-
-            setTimeout(() => {
-                this.getItems();
-            }, 300);
         }
 
         if (this.state.filteredItems === undefined) {
@@ -138,32 +152,37 @@ class Phones extends Component {
         positionY = this.state.positionY;
         items = this.state.filteredItems.slice(0, recordsCount);
 
-        if (event.nativeEvent.contentOffset.y >= positionY - 10) {
+        if (event.nativeEvent.contentOffset.y >= positionY) {
             this.setState({
                 dataSource: this.state.dataSource.cloneWithRows(items),
                 recordsCount: recordsCount + 10,
-                positionY: positionY + 500
+                positionY: positionY + 400
             });
         }
     }
 
     onChangeText(text) {
-        if (this.state.dataSource === undefined) {
+        if (this.state.responseData === undefined) {
             return;
         }
-
-        let arr = [].concat(this.state.responseData);
-        let items = arr.filter((el) => el.phone.toLowerCase().indexOf(text.toLowerCase()) !== -1);
+        var arr = [].concat(this.state.responseData);
+        var items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) >= 0);
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(items),
             resultsCount: items.length,
             filteredItems: items,
             searchQuery: text
-        });
+        })
     }
 
-    goBack() {
-        this.props.navigator.pop();
+    refreshDataAndroid() {
+        this.setState({
+            showProgress: true
+        });
+
+        setTimeout(() => {
+            this.getItems()
+        }, 1000);
     }
 
     clearSearchQuery() {
@@ -177,8 +196,8 @@ class Phones extends Component {
         });
     }
 
-    onMenu() {
-        //appConfig.drawer.openDrawer();
+    goBack(rowData) {
+        this.props.navigator.pop();
     }
 
     render() {
@@ -215,33 +234,30 @@ class Phones extends Component {
             <View style={styles.container}>
                 <View style={styles.header}>
                     <View>
-                        <TouchableWithoutFeedback onPress={this.onMenu.bind(this)}>
-                            <View>
-                                <Image
-                                    style={styles.menu}
-                                    source={require('../../../img/menu.png')}
-                                />
-                            </View>
-                        </TouchableWithoutFeedback>
+                        <TouchableHighlight
+                            onPress={() => this.goBack()}
+                            underlayColor='darkblue'
+                        >
+                            <Text style={styles.textSmall}>
+                                Back
+                            </Text>
+                        </TouchableHighlight>
                     </View>
-                    <View>
-                        <TouchableWithoutFeedback>
-                            <View>
-                                <Text style={styles.textLarge}>
-                                    Phones
-                                </Text>
-                            </View>
-                        </TouchableWithoutFeedback>
+                    <View style={styles.itemWrap}>
+                        <TouchableHighlight
+                            underlayColor='darkblue'
+                        >
+                            <Text style={styles.textLarge}>
+                                {this.state.searchQueryHttp}
+                            </Text>
+                        </TouchableHighlight>
                     </View>
                     <View>
                         <TouchableHighlight
-                            onPress={() => this.goSearch()}
-                            underlayColor='darkblue'>
-                            <View>
-                                <Text style={styles.textSmall}>
-                                    Search
-                                </Text>
-                            </View>
+                            underlayColor='darkblue'
+                        >
+                            <Text style={styles.textSmall}>
+                            </Text>
                         </TouchableHighlight>
                     </View>
                 </View>
@@ -251,14 +267,31 @@ class Phones extends Component {
                         <TextInput
                             underlineColorAndroid='rgba(0,0,0,0)'
                             onChangeText={this.onChangeText.bind(this)}
-                            style={styles.searchLarge}
+                            style={{
+                                height: 45,
+                                padding: 5,
+                                backgroundColor: 'white',
+                                borderWidth: 3,
+                                borderColor: 'white',
+                                borderRadius: 0,
+                                width: Dimensions.get('window').width * .90,
+                            }}
                             value={this.state.searchQuery}
                             placeholder="Search here">
                         </TextInput>
                     </View>
-                    <View style={styles.searchSmall}>
+                    <View style={{
+                        height: 45,
+                        backgroundColor: 'white',
+                        borderWidth: 3,
+                        borderColor: 'white',
+                        marginLeft: -10,
+                        paddingLeft: 5,
+                        width: Dimensions.get('window').width * .10,
+                    }}>
                         <TouchableWithoutFeedback
-                            onPress={() => this.clearSearchQuery()}>
+                            onPress={() => this.clearSearchQuery()}
+                        >
                             <View>
                                 {image}
                             </View>
@@ -270,8 +303,15 @@ class Phones extends Component {
 
                 {loader}
 
-                <ScrollView
-                    onScroll={this.refreshData.bind(this)} scrollEventThrottle={16}>
+                <ScrollView onScroll={this.refreshData.bind(this)} scrollEventThrottle={16}
+                            refreshControl={
+                                <RefreshControl
+                                    enabled={true}
+                                    refreshing={this.state.refreshing}
+                                    onRefresh={this.refreshDataAndroid.bind(this)}
+                                />
+                            }
+                >
                     <ListView
                         enableEmptySections={true}
                         dataSource={this.state.dataSource}
@@ -281,49 +321,65 @@ class Phones extends Component {
 
                 <View>
                     <Text style={styles.countFooter}>
-                        Records: {this.state.resultsCount.toString()}
+                        Records: {this.state.resultsCount}
                     </Text>
                 </View>
             </View>
-        );
+        )
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
+    imgsList: {
         flex: 1,
-        justifyContent: 'center',
-        backgroundColor: 'white'
+        flexDirection: 'row',
+        padding: 0,
+        alignItems: 'center',
+        borderColor: '#D7D7D7',
+        borderBottomWidth: 1,
+        backgroundColor: '#fff'
     },
     iconForm: {
         flexDirection: 'row',
         borderColor: 'darkblue',
         borderWidth: 3
     },
+    countHeader: {
+        fontSize: 16,
+        textAlign: 'center',
+        padding: 15,
+        backgroundColor: '#F5FCFF'
+    },
+    img: {
+        height: 95,
+        width: 90,
+        borderRadius: 10,
+        margin: 10
+    },
+    textBlock: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between'
+    },
+    textItemBold: {
+        fontWeight: 'bold',
+        color: 'black'
+    },
+    textItem: {
+        color: 'black'
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: 'white'
+    },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderWidth: 0,
         borderColor: 'whitesmoke'
-    },
-    searchLarge: {
-        height: 45,
-        padding: 5,
-        backgroundColor: 'white',
-        borderWidth: 3,
-        borderColor: 'white',
-        borderRadius: 0,
-        width: Dimensions.get('window').width * .90
-    },
-    searchSmall: {
-        height: 45,
-        backgroundColor: 'white',
-        borderWidth: 3,
-        borderColor: 'white',
-        marginLeft: -5,
-        paddingLeft: 5,
-        width: Dimensions.get('window').width * .10
     },
     textSmall: {
         fontSize: 16,
@@ -336,8 +392,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         margin: 10,
-        marginTop: 12,
-        paddingLeft: 20,
+        marginRight: 40,
         fontWeight: 'bold',
         color: 'white'
     },
@@ -369,6 +424,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 10,
         borderColor: '#D7D7D7',
+        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         color: 'white',
         fontWeight: 'bold'
@@ -381,12 +437,7 @@ const styles = StyleSheet.create({
         color: 'red',
         paddingTop: 10,
         textAlign: 'center'
-    },
-    menu: {
-        alignItems: 'center',
-        margin: 14,
-        marginTop: 16
     }
 });
 
-export default Phones;
+export default SearchResultsMusic;
