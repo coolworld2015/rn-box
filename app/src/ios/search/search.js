@@ -22,10 +22,10 @@ class Search extends Component {
             eventSwitchTitle: true,
             eventSwitchBase: true,
             eventSwitchBaseMovies: true,
-            eventSwitchBaseType: false,
+            eventSwitchBaseType: true,
             textSwitchBase: 'Search clips',
             textSwitchBaseMovies: 'Search movies',
-            textSwitchBaseType: 'Music',
+            textSwitchBaseType: 'Movies',
             bugANDROID: '',
             width: Dimensions.get('window').width
         }

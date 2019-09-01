@@ -143,11 +143,11 @@ class SearchMoviesDetails extends Component {
                         </Text>
 
                         <Text style={styles.itemText}>
-                            {this.state.pushEvent.releaseDate.split('-')[0]}
+                            {this.state.pushEvent.primaryGenreName}
                         </Text>
 
                         <Text style={styles.itemText}>
-                            {this.state.pushEvent.primaryGenreName}
+                            {this.state.pushEvent.releaseDate.split('-')[0]}
                         </Text>
 
                         <Text style={styles.itemTextSmallBold}>
