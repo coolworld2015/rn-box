@@ -19,8 +19,22 @@ const SearchTab = createStackNavigator({
     playTrack
 });
 
+const MoviesTab = createStackNavigator({
+    searchMoviesResults,
+    searchMoviesDetails,
+    playTrack
+});
+
+const MusicTab = createStackNavigator({
+    searchMusicResults,
+    searchMusicDetails,
+    playTrack
+});
+
 const TabNavigator = createBottomTabNavigator({
-        Search: SearchTab
+        Search: SearchTab,
+        Movies: MoviesTab,
+        Music: MusicTab
     },
     {
         defaultNavigationOptions: ({navigation}) => ({
@@ -30,17 +44,17 @@ const TabNavigator = createBottomTabNavigator({
 
                 if (routeName === 'Search') {
                     iconName = <Image
-                        source={require('../../../img/phones.png')}
+                        source={require('../../../img/search.png')}
                         style={{
-                            height: 15,
-                            width: 15,
-                            margin: 0
+                            height: 20,
+                            width: 20,
+                            margin: 10
                         }}
                     />;
                 }
-                if (routeName === 'Users') {
+                if (routeName === 'Movies') {
                     iconName = <Image
-                        source={require('../../../img/users.png')}
+                        source={require('../../../img/movies.png')}
                         style={{
                             height: 20,
                             width: 20,
@@ -48,19 +62,9 @@ const TabNavigator = createBottomTabNavigator({
                         }}
                     />;
                 }
-                if (routeName === 'Audit') {
+                if (routeName === 'Music') {
                     iconName = <Image
-                        source={require('../../../img/clock.png')}
-                        style={{
-                            height: 20,
-                            width: 20,
-                            margin: 0
-                        }}
-                    />;
-                }
-                if (routeName === 'Quit') {
-                    iconName = <Image
-                        source={require('../../../img/log-out.png')}
+                        source={require('../../../img/music.png')}
                         style={{
                             height: 20,
                             width: 20,
