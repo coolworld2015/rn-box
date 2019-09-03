@@ -57,7 +57,7 @@ const TabNavigator = createBottomTabNavigator({
                             width: 20,
                             margin: 10
                         }}
-                    />;
+                    />
                 }
                 if (routeName === 'Movies') {
                     iconName = <Image
@@ -67,7 +67,7 @@ const TabNavigator = createBottomTabNavigator({
                             width: 20,
                             margin: 0
                         }}
-                    />;
+                    />
                 }
                 if (routeName === 'Music') {
                     iconName = <Image
@@ -77,10 +77,10 @@ const TabNavigator = createBottomTabNavigator({
                             width: 20,
                             margin: 0
                         }}
-                    />;
+                    />
                 }
 
-                return iconName;
+                return iconName
             }
         })
     });

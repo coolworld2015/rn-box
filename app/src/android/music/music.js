@@ -6,15 +6,15 @@ import {
     Text,
     View,
     TouchableHighlight,
-	TouchableWithoutFeedback,
+    TouchableWithoutFeedback,
     ScrollView,
     ActivityIndicator,
     TextInput,
     AsyncStorage,
     Alert,
-	Image,
-	Dimensions,
-	RefreshControl
+    Image,
+    Dimensions,
+    RefreshControl
 } from 'react-native';
 
 import ListView from 'deprecated-react-native-listview';
@@ -33,14 +33,14 @@ class Music extends Component {
             resultsCount: 0,
             recordsCount: 15,
             positionY: 0,
-			searchQuery: '',
-			refreshing: false,
-			width: Dimensions.get('window').width
+            searchQuery: '',
+            refreshing: false,
+            width: Dimensions.get('window').width
         };
     }
 
     componentDidMount() {
-		this.setState({
+        this.setState({
             width: Dimensions.get('window').width
         });
         this.getItems();
@@ -54,35 +54,35 @@ class Music extends Component {
                 showProgress: true
             });
 
-			setTimeout(() => {
-				this.getItems()
-			}, 1000);
+            setTimeout(() => {
+                this.getItems()
+            }, 1000);
         }
     }
 
     getItems() {
-		this.setState({
-			serverError: false,
+        this.setState({
+            serverError: false,
             resultsCount: 0,
             recordsCount: 15,
             positionY: 0,
-			searchQuery: ''
+            searchQuery: ''
         });
 
         AsyncStorage.getItem('rn-box.music')
             .then(req => JSON.parse(req))
             .then(json => {
-				if (json) {
-					this.setState({
-						dataSource: this.state.dataSource.cloneWithRows(json.sort(this.sort).slice(0, 5)),
-						resultsCount: json.length,
-						responseData: json.sort(this.sort),
-						filteredItems: json.sort(this.sort)
-					});
-				}
+                if (json) {
+                    this.setState({
+                        dataSource: this.state.dataSource.cloneWithRows(json.sort(this.sort).slice(0, 5)),
+                        resultsCount: json.length,
+                        responseData: json.sort(this.sort),
+                        filteredItems: json.sort(this.sort)
+                    });
+                }
             })
             .catch(error => console.log(error))
-            .finally(()=> {
+            .finally(() => {
                 this.setState({
                     showProgress: false
                 });
@@ -101,10 +101,10 @@ class Music extends Component {
     }
 
     showDetails(rowData) {
-		this.props.navigator.push({
-			index: 1,
-			data: rowData
-		});
+        this.props.navigator.push({
+            index: 1,
+            data: rowData
+        });
     }
 
     renderRow(rowData) {
@@ -125,7 +125,7 @@ class Music extends Component {
 
         return (
             <TouchableHighlight
-                onPress={()=> this.showDetails(rowData)}
+                onPress={() => this.showDetails(rowData)}
                 underlayColor='#ddd'
             >
                 <View style={styles.imgsList}>
@@ -134,24 +134,24 @@ class Music extends Component {
 
                     <View style={styles.textBlock}>
                         <Text style={styles.textItemBold}>
-							{rowData.trackName}
-						</Text>
+                            {rowData.trackName}
+                        </Text>
 
                         <Text style={styles.textItem}>
-							{rowData.releaseDate.split('-')[0]}
-						</Text>
+                            {rowData.releaseDate.split('-')[0]}
+                        </Text>
 
                         <Text style={styles.textItem}>
-							{rowData.country}
-						</Text>
+                            {rowData.country}
+                        </Text>
 
                         <Text style={styles.textItem}>
-							{rowData.primaryGenreName}
-						</Text>
+                            {rowData.primaryGenreName}
+                        </Text>
 
                         <Text style={styles.textItemBold}>
-							{rowData.artistName}
-						</Text>
+                            {rowData.artistName}
+                        </Text>
                     </View>
                 </View>
             </TouchableHighlight>
@@ -196,17 +196,17 @@ class Music extends Component {
         })
     }
 
-	refreshDataAndroid() {
-		this.setState({
-			showProgress: true
-		});
+    refreshDataAndroid() {
+        this.setState({
+            showProgress: true
+        });
 
-		setTimeout(() => {
-			this.getItems()
-		}, 1000);
-	}
+        setTimeout(() => {
+            this.getItems()
+        }, 1000);
+    }
 
-	clearSearchQuery() {
+    clearSearchQuery() {
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(this.state.responseData.slice(0, 15)),
             resultsCount: this.state.responseData.length,
@@ -230,117 +230,117 @@ class Music extends Component {
             loader = <View style={styles.loader}>
                 <ActivityIndicator
                     size="large"
-					color="darkblue"
+                    color="darkblue"
                     animating={true}
                 />
             </View>;
         }
 
-		if (this.state.searchQuery.length > 0) {
-			image = <Image
-				source={require('../../../img/cancel.png')}
-				style={{
-					height: 20,
-					width: 20,
-					marginTop: 10
-				}}
-			/>;
-		}
+        if (this.state.searchQuery.length > 0) {
+            image = <Image
+                source={require('../../../img/cancel.png')}
+                style={{
+                    height: 20,
+                    width: 20,
+                    marginTop: 10
+                }}
+            />;
+        }
 
         return (
             <View style={styles.container}>
-				<View style={styles.header}>
-					<View>
-						<TouchableHighlight
-							onPress={()=> this.refreshDataAndroid()}
-							underlayColor='#ddd'
-						>
-							<Text style={styles.textSmall}>
+                <View style={styles.header}>
+                    <View>
+                        <TouchableHighlight
+                            onPress={() => this.refreshDataAndroid()}
+                            underlayColor='#ddd'
+                        >
+                            <Text style={styles.textSmall}>
 
-							</Text>
-						</TouchableHighlight>
-					</View>
-					<View>
-						<TouchableHighlight
-							underlayColor='#ddd'
-						>
-							<Text style={styles.textLarge}>
-								Music
-							</Text>
-						</TouchableHighlight>
-					</View>
-					<View>
-						<TouchableHighlight
-							underlayColor='#ddd'
-						>
-							<Text style={styles.textSmall}>
-							</Text>
-						</TouchableHighlight>
-					</View>
-				</View>
-
-                <View style={styles.iconForm}>
-					<View>
-						<TextInput
-							underlineColorAndroid='rgba(0,0,0,0)'
-							onChangeText={this.onChangeText.bind(this)}
-							style={{
-								height: 45,
-								padding: 5,
-								backgroundColor: 'white',
-								borderWidth: 3,
-								borderColor: 'white',
-								borderRadius: 0,
-								width: this.state.width * .90,
-							}}
-							value={this.state.searchQuery}
-							placeholder="Search here">
-						</TextInput>
-					</View>
-					<View style={{
-						height: 45,
-						backgroundColor: 'white',
-						borderWidth: 3,
-						borderColor: 'white',
-						marginLeft: -10,
-						paddingLeft: 5,
-						width: this.state.width * .10,
-					}}>
-						<TouchableWithoutFeedback
-							onPress={() => this.clearSearchQuery()}
-						>
-							<View>
-								{image}
-							</View>
-						</TouchableWithoutFeedback>
-					</View>
+                            </Text>
+                        </TouchableHighlight>
+                    </View>
+                    <View>
+                        <TouchableHighlight
+                            underlayColor='#ddd'
+                        >
+                            <Text style={styles.textLarge}>
+                                Music
+                            </Text>
+                        </TouchableHighlight>
+                    </View>
+                    <View>
+                        <TouchableHighlight
+                            underlayColor='#ddd'
+                        >
+                            <Text style={styles.textSmall}>
+                            </Text>
+                        </TouchableHighlight>
+                    </View>
                 </View>
 
-				{errorCtrl}
+                <View style={styles.iconForm}>
+                    <View>
+                        <TextInput
+                            underlineColorAndroid='rgba(0,0,0,0)'
+                            onChangeText={this.onChangeText.bind(this)}
+                            style={{
+                                height: 45,
+                                padding: 5,
+                                backgroundColor: 'white',
+                                borderWidth: 3,
+                                borderColor: 'white',
+                                borderRadius: 0,
+                                width: this.state.width * .90,
+                            }}
+                            value={this.state.searchQuery}
+                            placeholder="Search here">
+                        </TextInput>
+                    </View>
+                    <View style={{
+                        height: 45,
+                        backgroundColor: 'white',
+                        borderWidth: 3,
+                        borderColor: 'white',
+                        marginLeft: -10,
+                        paddingLeft: 5,
+                        width: this.state.width * .10,
+                    }}>
+                        <TouchableWithoutFeedback
+                            onPress={() => this.clearSearchQuery()}
+                        >
+                            <View>
+                                {image}
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </View>
+                </View>
+
+                {errorCtrl}
 
                 {loader}
 
-				<ScrollView onScroll={this.refreshData.bind(this)} scrollEventThrottle={16}
-					refreshControl={
-						<RefreshControl
-							enabled={true}
-							refreshing={this.state.refreshing}
-							onRefresh={this.refreshDataAndroid.bind(this)}
-						/>
-					}
-				>
-					<ListView
-						enableEmptySections={true}
-						dataSource={this.state.dataSource}
-						renderRow={this.renderRow.bind(this)}
-					/>
-				</ScrollView>
+                <ScrollView onScroll={this.refreshData.bind(this)} scrollEventThrottle={16}
+                            refreshControl={
+                                <RefreshControl
+                                    enabled={true}
+                                    refreshing={this.state.refreshing}
+                                    onRefresh={this.refreshDataAndroid.bind(this)}
+                                />
+                            }
+                >
+                    <ListView
+                        enableEmptySections={true}
+                        dataSource={this.state.dataSource}
+                        renderRow={this.renderRow.bind(this)}
+                    />
+                </ScrollView>
 
-				<View>
-					<Text style={styles.countFooter}>
-						Records: {this.state.resultsCount}
-					</Text>
-				</View>
+                <View>
+                    <Text style={styles.countFooter}>
+                        Records: {this.state.resultsCount}
+                    </Text>
+                </View>
             </View>
         )
     }
@@ -356,11 +356,11 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         backgroundColor: '#fff'
     },
-	iconForm: {
-		flexDirection: 'row',
-		borderColor: 'darkblue',
-		borderWidth: 3
-	},
+    iconForm: {
+        flexDirection: 'row',
+        borderColor: 'darkblue',
+        borderWidth: 3
+    },
     countHeader: {
         fontSize: 16,
         textAlign: 'center',
@@ -373,69 +373,69 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         margin: 10
     },
-	textBlock: {
-		flex: 1,
-		flexDirection: 'column',
-		justifyContent: 'space-between'
+    textBlock: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between'
     },
-	textItemBold: {
-		fontWeight: 'bold',
-		color: 'black'
+    textItemBold: {
+        fontWeight: 'bold',
+        color: 'black'
     },
-	textItem: {
-		color: 'black'
+    textItem: {
+        color: 'black'
     },
-	container: {
-		flex: 1,
-		justifyContent: 'center',
-		backgroundColor: 'white'
-	},
-	header: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		//backgroundColor: '#48BBEC',
-		backgroundColor: 'darkblue',
-		borderWidth: 0,
-		borderColor: 'whitesmoke'
-	},
-	textSmall: {
-		fontSize: 16,
-		textAlign: 'center',
-		margin: 14,
-		fontWeight: 'bold',
-		color: 'white'
-	},
-	textLarge: {
-		fontSize: 20,
-		textAlign: 'center',
-		margin: 10,
-		marginRight: 20,
-		fontWeight: 'bold',
-		color: 'white'
-	},
-	textInput: {
-		height: 45,
-		marginTop: 0,
-		padding: 5,
-		backgroundColor: 'white',
-		borderWidth: 3,
-		borderColor: 'lightgray',
-		borderRadius: 0
-	},
-	row: {
-		flex: 1,
-		flexDirection: 'row',
-		padding: 20,
-		alignItems: 'center',
-		borderColor: '#D7D7D7',
-		borderBottomWidth: 1,
-		backgroundColor: '#fff'
-	},
-	rowText: {
-		backgroundColor: '#fff',
-		color: 'black',
-		fontWeight: 'bold'
-	},
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: 'white'
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        //backgroundColor: '#48BBEC',
+        backgroundColor: 'darkblue',
+        borderWidth: 0,
+        borderColor: 'whitesmoke'
+    },
+    textSmall: {
+        fontSize: 16,
+        textAlign: 'center',
+        margin: 14,
+        fontWeight: 'bold',
+        color: 'white'
+    },
+    textLarge: {
+        fontSize: 20,
+        textAlign: 'center',
+        margin: 10,
+        marginRight: 20,
+        fontWeight: 'bold',
+        color: 'white'
+    },
+    textInput: {
+        height: 45,
+        marginTop: 0,
+        padding: 5,
+        backgroundColor: 'white',
+        borderWidth: 3,
+        borderColor: 'lightgray',
+        borderRadius: 0
+    },
+    row: {
+        flex: 1,
+        flexDirection: 'row',
+        padding: 20,
+        alignItems: 'center',
+        borderColor: '#D7D7D7',
+        borderBottomWidth: 1,
+        backgroundColor: '#fff'
+    },
+    rowText: {
+        backgroundColor: '#fff',
+        color: 'black',
+        fontWeight: 'bold'
+    },
     countFooter: {
         fontSize: 16,
         textAlign: 'center',
@@ -443,12 +443,12 @@ const styles = StyleSheet.create({
         borderColor: '#D7D7D7',
         //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
-		color: 'white',
-		fontWeight: 'bold'
+        color: 'white',
+        fontWeight: 'bold'
     },
     loader: {
-		justifyContent: 'center',
-		height: 100
+        justifyContent: 'center',
+        height: 100
     },
     error: {
         color: 'red',

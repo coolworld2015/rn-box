@@ -50,7 +50,7 @@ class PlayTrack extends Component {
                        }}
                        style={styles.backgroundVideo}/>
 
-               {/* <View style={styles.header}>
+                {/* <View style={styles.header}>
                     <View>
                         <TouchableHighlight
                             onPress={() => this.goBack()}

@@ -35,7 +35,7 @@ class SearchResultsMusic extends Component {
         this.state = {
             dataSource: ds.cloneWithRows([]),
             searchQuery: '',
-			width: Dimensions.get('window').width
+            width: Dimensions.get('window').width
         };
 
         if (props.data) {

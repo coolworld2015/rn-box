@@ -136,9 +136,9 @@ class MoviesDetails extends Component {
                         </TouchableHighlight>
                     </View>
                     <View style={styles.itemWrap}>
-                            <Text style={styles.textLarge}>
-                                {this.state.pushEvent.trackName}
-                            </Text>
+                        <Text style={styles.textLarge}>
+                            {this.state.pushEvent.trackName}
+                        </Text>
                     </View>
                     <View>
                         <TouchableHighlight
