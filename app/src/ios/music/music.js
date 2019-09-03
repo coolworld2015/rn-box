@@ -101,10 +101,8 @@ class Music extends Component {
     }
 
     showDetails(rowData) {
-		this.props.navigator.push({
-			index: 1,
-			data: rowData
-		});
+		appConfig.item = rowData;
+		this.props.navigation.navigate('searchMusicDetails');
     }
 
     renderRow(rowData) {

@@ -104,8 +104,7 @@ class SearchMoviesResults extends Component {
         return (
             <TouchableHighlight
                 onPress={() => this.pressRow(rowData)}
-                underlayColor='#ddd'
-            >
+                underlayColor='#ddd'>
                 <View style={styles.imgsList}>
                     <Image
                         source={{uri: rowData.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg')}}
@@ -175,7 +174,7 @@ class SearchMoviesResults extends Component {
     }
 
     onChangeText(text) {
-        if (this.state.responseData == undefined) {
+        if (this.state.responseData === undefined) {
             return;
         }
         var arr = [].concat(this.state.responseData);
@@ -186,16 +185,6 @@ class SearchMoviesResults extends Component {
             filteredItems: items,
             searchQuery: text
         })
-    }
-
-    refreshDataAndroid() {
-        this.setState({
-            showProgress: true
-        });
-
-        setTimeout(() => {
-            this.getItems()
-        }, 1000);
     }
 
     clearSearchQuery() {

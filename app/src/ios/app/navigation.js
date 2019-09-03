@@ -24,12 +24,14 @@ const SearchTab = createStackNavigator({
 });
 
 const MoviesTab = createStackNavigator({
-    Movies: Movies,
+    Movies,
+    searchMoviesDetails,
     playTrack
 });
 
 const MusicTab = createStackNavigator({
-    Music: Music,
+    Music,
+    searchMusicDetails,
     playTrack
 });
 

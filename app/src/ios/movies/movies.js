@@ -101,10 +101,8 @@ class Movies extends Component {
     }
 
     showDetails(rowData) {
-        this.props.navigator.push({
-            index: 1,
-            data: rowData
-        });
+        appConfig.item = rowData;
+        this.props.navigation.navigate('searchMoviesDetails');
     }
 
     renderRow(rowData) {
@@ -196,12 +194,12 @@ class Movies extends Component {
     }
 
     onChangeText(text) {
-        if (this.state.responseData == undefined) {
+        if (this.state.responseData === undefined) {
             return;
         }
 
-        var arr = [].concat(this.state.responseData);
-        var items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) != -1);
+        let arr = [].concat(this.state.responseData);
+        let items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) !== -1);
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(items),
             resultsCount: items.length,
