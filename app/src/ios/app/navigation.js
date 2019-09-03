@@ -8,6 +8,10 @@ import searchMusicDetails from '../search/searchMusicDetails';
 
 import searchMoviesResults from '../search/searchMoviesResults';
 import searchMoviesDetails from '../search/searchMoviesDetails';
+
+import Movies from '../movies/movies';
+import Music from '../music/music';
+
 import playTrack from './playTrack';
 
 const SearchTab = createStackNavigator({
@@ -20,14 +24,12 @@ const SearchTab = createStackNavigator({
 });
 
 const MoviesTab = createStackNavigator({
-    searchMoviesResults,
-    searchMoviesDetails,
+    Movies: Movies,
     playTrack
 });
 
 const MusicTab = createStackNavigator({
-    searchMusicResults,
-    searchMusicDetails,
+    Music: Music,
     playTrack
 });
 
