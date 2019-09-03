@@ -127,6 +127,20 @@ class SearchMusicResults extends Component {
             return;
         }
 
+        if (event.nativeEvent.contentOffset.y <= -100) {
+            this.setState({
+                showProgress: true,
+                resultsCount: 0,
+                recordsCount: 25,
+                positionY: 0,
+                searchQuery: ''
+            });
+
+            setTimeout(() => {
+                this.getItems();
+            }, 300);
+        }
+
         if (this.state.filteredItems === undefined) {
             return;
         }
@@ -136,11 +150,11 @@ class SearchMusicResults extends Component {
         positionY = this.state.positionY;
         items = this.state.filteredItems.slice(0, recordsCount);
 
-        if (event.nativeEvent.contentOffset.y >= positionY) {
+        if (event.nativeEvent.contentOffset.y >= positionY - 10) {
             this.setState({
                 dataSource: this.state.dataSource.cloneWithRows(items),
                 recordsCount: recordsCount + 10,
-                positionY: positionY + 400
+                positionY: positionY + 500
             });
         }
     }
@@ -287,16 +301,10 @@ class SearchMusicResults extends Component {
 
                 {loader}
 
-                <ScrollView onScroll={this.refreshData.bind(this)} scrollEventThrottle={16}
-                            refreshControl={
-                                <RefreshControl
-                                    enabled={true}
-                                    refreshing={this.state.refreshing}
-                                    onRefresh={this.refreshDataAndroid.bind(this)}
-                                />
-                            }
-                >
+                <ScrollView
+                    onScroll={this.refreshData.bind(this)} scrollEventThrottle={16}>
                     <ListView
+                        style={styles.scroll}
                         enableEmptySections={true}
                         dataSource={this.state.dataSource}
                         renderRow={this.renderRow.bind(this)}
