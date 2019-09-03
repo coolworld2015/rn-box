@@ -102,7 +102,7 @@ class Movies extends Component {
 
     showDetails(rowData) {
         appConfig.item = rowData;
-        this.props.navigation.navigate('searchMoviesDetails');
+        this.props.navigation.navigate('moviesDetails');
     }
 
     renderRow(rowData) {

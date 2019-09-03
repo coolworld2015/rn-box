@@ -102,7 +102,7 @@ class Music extends Component {
 
     showDetails(rowData) {
 		appConfig.item = rowData;
-		this.props.navigation.navigate('searchMusicDetails');
+		this.props.navigation.navigate('musicDetails');
     }
 
     renderRow(rowData) {

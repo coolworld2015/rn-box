@@ -15,7 +15,7 @@ import {
     Alert,
 } from 'react-native';
 
-class SearchMusicDetails extends Component {
+class MusicDetails extends Component {
     constructor(props) {
         super(props);
 
@@ -24,40 +24,60 @@ class SearchMusicDetails extends Component {
         }
     }
 
-    localStorageInsert() {
+
+    deleteMusicDialog() {
+        Alert.alert(
+            'Delete music',
+            'Are you sure you want to delete music ' + this.state.pushEvent.trackName + '?',
+            [
+                {text: 'Cancel', onPress: () => console.log('Cancel Pressed!')},
+                {
+                    text: 'OK', onPress: () => {
+                        this.deleteMusic();
+                    }
+                },
+            ]
+        );
+    }
+
+    deleteMusic() {
+        var id = this.state.pushEvent.trackId;
         var music = [];
 
         AsyncStorage.getItem('rn-box.music')
             .then(req => JSON.parse(req))
             .then(json => {
-                music = [].concat(json);
-                music.push(this.state.pushEvent);
 
-                if (music[0] == null) {
-                    music.shift()
-                } // Hack !!!
+                music = [].concat(json);
+
+                for (var i = 0; i < music.length; i++) {
+                    if (music[i].trackId == id) {
+                        music.splice(i, 1);
+                        break;
+                    }
+                }
 
                 AsyncStorage.setItem('rn-box.music', JSON.stringify(music))
                     .then(json => {
                             appConfig.music.refresh = true;
-                            this.props.navigator.pop();
+                            this.props.navigation.navigate('Music', {refresh: true});
                         }
                     );
 
             })
-            .catch(error => console.log(error));
+            .catch(error => console.log(error))
     }
 
     playTrack() {
-		appConfig.item = {
-			name: this.state.pushEvent.trackName,
-			url: this.state.pushEvent.previewUrl
-		};
-		this.props.navigation.navigate('playTrack');
+        appConfig.item = {
+            name: this.state.pushEvent.trackName,
+            url: this.state.pushEvent.previewUrl
+        };
+        this.props.navigation.navigate('playTrack');
     }
 
     goBack() {
-		this.props.navigation.goBack();
+        this.props.navigation.goBack();
     }
 
     render() {
@@ -111,11 +131,11 @@ class SearchMusicDetails extends Component {
                     </View>
                     <View>
                         <TouchableHighlight
-                            onPress={() => this.localStorageInsert()}
+                            onPress={() => this.deleteMusicDialog()}
                             underlayColor='darkblue'
                         >
                             <Text style={styles.textSmall}>
-                                Add
+                                Delete
                             </Text>
                         </TouchableHighlight>
                     </View>
@@ -220,8 +240,8 @@ const styles = StyleSheet.create({
         margin: 7,
         fontWeight: 'bold',
         color: 'black',
-/*        fontFamily: 'Cursive',
-        fontStyle: 'italic'*/
+        /*        fontFamily: 'Cursive',
+                fontStyle: 'italic'*/
     },
     itemText: {
         fontSize: 20,
@@ -264,4 +284,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SearchMusicDetails;
+export default MusicDetails;

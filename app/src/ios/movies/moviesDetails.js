@@ -7,15 +7,12 @@ import {
     View,
     Image,
     TouchableHighlight,
-    ListView,
     ScrollView,
-    ActivityIndicator,
-    TextInput,
     AsyncStorage,
     Alert
 } from 'react-native';
 
-class SearchMoviesDetails extends Component {
+class MoviesDetails extends Component {
     constructor(props) {
         super(props);
 
@@ -24,44 +21,59 @@ class SearchMoviesDetails extends Component {
         }
     }
 
-    localStorageInsert() {
-        var movies = [];
+    deleteMovieDialog() {
+        Alert.alert(
+            'Delete movie',
+            'Are you sure you want to delete movie ' + this.state.pushEvent.trackName + '?',
+            [
+                {text: 'Cancel', onPress: () => console.log('Cancel Pressed!')},
+                {
+                    text: 'OK', onPress: () => {
+                        this.deleteMovie()
+                    }
+                }
+            ]
+        )
+    }
+
+    deleteMovie() {
+        let id = this.state.pushEvent.trackId;
+        let movies = [];
 
         AsyncStorage.getItem('rn-box.movies')
             .then(req => JSON.parse(req))
             .then(json => {
                 movies = [].concat(json);
-                movies.push(this.state.pushEvent);
-
-                if (movies[0] == null) {
-                    movies.shift()
-                } // Hack !!!
-
+                for (let i = 0; i < movies.length; i++) {
+                    if (movies[i].trackId === id) {
+                        movies.splice(i, 1);
+                        break;
+                    }
+                }
                 AsyncStorage.setItem('rn-box.movies', JSON.stringify(movies))
                     .then(json => {
                             appConfig.movies.refresh = true;
-                            this.props.navigator.pop();
+                            this.props.navigation.navigate('Movies', {refresh: true})
                         }
-                    );
-
+                    )
             })
-            .catch(error => console.log(error));
+            .catch(error => console.log(error))
     }
 
-	playTrack() {
-		appConfig.item = {
-			name: this.state.pushEvent.trackName,
-			url: this.state.pushEvent.previewUrl
-		};
-		this.props.navigation.navigate('playTrack');
-	}
+    playTrack() {
+        appConfig.item = {
+            name: this.state.pushEvent.trackName,
+            url: this.state.pushEvent.previewUrl
+        };
+        this.props.navigation.navigate('playTrack');
+    }
 
     goBack() {
         this.props.navigation.goBack();
     }
 
     render() {
-        var image = <View/>;
+        let image = <View/>;
 
         if (this.state.pushEvent) {
             if (this.state.pushEvent.artworkUrl100) {
@@ -73,7 +85,7 @@ class SearchMoviesDetails extends Component {
                         borderRadius: 10,
                         margin: 5
                     }}
-                />;
+                />
             } else {
                 image = <Image
                     source={{uri: this.state.pushEvent.pic}}
@@ -83,7 +95,7 @@ class SearchMoviesDetails extends Component {
                         borderRadius: 20,
                         margin: 20
                     }}
-                />;
+                />
             }
         }
 
@@ -93,8 +105,7 @@ class SearchMoviesDetails extends Component {
                     <View>
                         <TouchableHighlight
                             onPress={() => this.goBack()}
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textSmall}>
                                 Back
                             </Text>
@@ -102,8 +113,7 @@ class SearchMoviesDetails extends Component {
                     </View>
                     <View style={styles.itemWrap}>
                         <TouchableHighlight
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textLarge}>
                                 {this.state.pushEvent.trackName}
                             </Text>
@@ -111,11 +121,10 @@ class SearchMoviesDetails extends Component {
                     </View>
                     <View>
                         <TouchableHighlight
-                            onPress={() => this.localStorageInsert()}
-                            underlayColor='darkblue'
-                        >
+                            onPress={() => this.deleteMovieDialog()}
+                            underlayColor='darkblue'>
                             <Text style={styles.textSmall}>
-                                Add
+                                Delete
                             </Text>
                         </TouchableHighlight>
                     </View>
@@ -132,8 +141,7 @@ class SearchMoviesDetails extends Component {
                         <View style={{alignItems: 'center'}}>
                             <TouchableHighlight
                                 onPress={() => this.playTrack()}
-                                underlayColor='darkblue'
-                            >
+                                underlayColor='darkblue'>
                                 {image}
                             </TouchableHighlight>
                         </View>
@@ -169,106 +177,101 @@ class SearchMoviesDetails extends Component {
                     </View>
                 </ScrollView>
             </View>
-        );
+        )
     }
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: 'center',
-		backgroundColor: 'white'
-	},
-	header: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		//backgroundColor: '#48BBEC',
-		backgroundColor: 'darkblue',
-		borderWidth: 0,
-		borderColor: 'whitesmoke'
-	},
-	textSmall: {
-		fontSize: 16,
-		textAlign: 'center',
-		margin: 14,
-		fontWeight: 'bold',
-		color: 'white'
-	},
-	textLarge: {
-		fontSize: 20,
-		textAlign: 'center',
-		margin: 10,
-		marginRight: 20,
-		fontWeight: 'bold',
-		color: 'white'
-	},
-	form: {
-		flex: 1,
-		padding: 10,
-		justifyContent: 'flex-start',
-		paddingBottom: 130,
-		backgroundColor: 'white'
-	},
-	itemWrap: {
-		flex: 1,
-		flexDirection: 'column',
-		//flexWrap: 'wrap'
-	},
-	itemTextBold: {
-		fontSize: 25,
-		textAlign: 'center',
-		margin: 7,
-		fontWeight: 'bold',
-		color: 'black',
-		/*        fontFamily: 'Cursive',
-                fontStyle: 'italic'*/
-	},
-	itemText: {
-		fontSize: 20,
-		textAlign: 'center',
-		margin: 5,
-		marginLeft: 2,
-		color: 'black'
-	},
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: 'white'
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        backgroundColor: 'darkblue',
+        borderWidth: 0,
+        borderColor: 'whitesmoke'
+    },
+    textSmall: {
+        fontSize: 16,
+        textAlign: 'center',
+        margin: 14,
+        fontWeight: 'bold',
+        color: 'white'
+    },
+    textLarge: {
+        fontSize: 20,
+        textAlign: 'center',
+        margin: 10,
+        marginRight: 20,
+        fontWeight: 'bold',
+        color: 'white'
+    },
+    form: {
+        flex: 1,
+        padding: 10,
+        justifyContent: 'flex-start',
+        paddingBottom: 130,
+        backgroundColor: 'white'
+    },
+    itemWrap: {
+        flex: 1,
+        flexDirection: 'column'
+    },
+    itemTextBold: {
+        fontSize: 25,
+        textAlign: 'center',
+        margin: 7,
+        fontWeight: 'bold',
+        color: 'black',
+    },
+    itemText: {
+        fontSize: 20,
+        textAlign: 'center',
+        margin: 5,
+        marginLeft: 2,
+        color: 'black'
+    },
     itemTextDescription: {
-		fontSize: 20,
-		textAlign: 'justify',
-		margin: 5,
-		marginLeft: 2,
-		color: 'black'
-	},
-	itemTextSmallBold: {
-		fontSize: 20,
-		textAlign: 'center',
-		margin: 7,
-		marginLeft: 2,
-		fontWeight: 'bold',
-		color: 'black'
-	},
-	button: {
-		height: 50,
-		//backgroundColor: '#48BBEC',
-		backgroundColor: 'darkblue',
-		borderColor: '#48BBEC',
-		alignSelf: 'stretch',
-		marginTop: 10,
-		justifyContent: 'center',
-		alignItems: 'center',
-		borderRadius: 5
-	},
-	buttonText: {
-		color: '#fff',
-		fontSize: 20,
-		fontWeight: 'bold'
-	},
-	loader: {
-		marginTop: 20
-	},
-	error: {
-		color: 'red',
-		paddingTop: 10,
-		textAlign: 'center'
-	}
+        fontSize: 20,
+        textAlign: 'justify',
+        margin: 5,
+        marginLeft: 2,
+        color: 'black'
+    },
+    itemTextSmallBold: {
+        fontSize: 20,
+        textAlign: 'center',
+        margin: 7,
+        marginLeft: 2,
+        fontWeight: 'bold',
+        color: 'black'
+    },
+    button: {
+        height: 50,
+        backgroundColor: 'darkblue',
+        borderColor: '#48BBEC',
+        alignSelf: 'stretch',
+        marginTop: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+    loader: {
+        marginTop: 20
+    },
+    error: {
+        color: 'red',
+        paddingTop: 10,
+        textAlign: 'center'
+    }
 });
 
-export default SearchMoviesDetails;
+export default MoviesDetails;

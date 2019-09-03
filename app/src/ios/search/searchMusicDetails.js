@@ -25,7 +25,7 @@ class SearchMusicDetails extends Component {
     }
 
     localStorageInsert() {
-        var music = [];
+        let music = [];
 
         AsyncStorage.getItem('rn-box.music')
             .then(req => JSON.parse(req))
@@ -35,12 +35,12 @@ class SearchMusicDetails extends Component {
 
                 if (music[0] == null) {
                     music.shift()
-                } // Hack !!!
+                }
 
                 AsyncStorage.setItem('rn-box.music', JSON.stringify(music))
                     .then(json => {
                             appConfig.music.refresh = true;
-                            this.props.navigator.pop();
+                            this.props.navigation.goBack();
                         }
                     );
 
@@ -49,15 +49,15 @@ class SearchMusicDetails extends Component {
     }
 
     playTrack() {
-		appConfig.item = {
-			name: this.state.pushEvent.trackName,
-			url: this.state.pushEvent.previewUrl
-		};
-		this.props.navigation.navigate('playTrack');
+        appConfig.item = {
+            name: this.state.pushEvent.trackName,
+            url: this.state.pushEvent.previewUrl
+        };
+        this.props.navigation.navigate('playTrack');
     }
 
     goBack() {
-		this.props.navigation.goBack();
+        this.props.navigation.goBack();
     }
 
     render() {
@@ -220,8 +220,8 @@ const styles = StyleSheet.create({
         margin: 7,
         fontWeight: 'bold',
         color: 'black',
-/*        fontFamily: 'Cursive',
-        fontStyle: 'italic'*/
+        /*        fontFamily: 'Cursive',
+                fontStyle: 'italic'*/
     },
     itemText: {
         fontSize: 20,
