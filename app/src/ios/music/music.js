@@ -158,28 +158,42 @@ class Music extends Component {
         );
     }
 
-    refreshData(event) {
-        if (this.state.showProgress === true) {
-            return;
-        }
+	refreshData(event) {
+		if (this.state.showProgress === true) {
+			return;
+		}
 
-        if (this.state.filteredItems === undefined) {
-            return;
-        }
+		if (event.nativeEvent.contentOffset.y <= -100) {
+			this.setState({
+				showProgress: true,
+				resultsCount: 0,
+				recordsCount: 25,
+				positionY: 0,
+				searchQuery: ''
+			});
 
-        let items, positionY, recordsCount;
-        recordsCount = this.state.recordsCount;
-        positionY = this.state.positionY;
-        items = this.state.filteredItems.slice(0, recordsCount);
+			setTimeout(() => {
+				this.getItems();
+			}, 300);
+		}
 
-        if (event.nativeEvent.contentOffset.y >= positionY) {
-            this.setState({
-                dataSource: this.state.dataSource.cloneWithRows(items),
-                recordsCount: recordsCount + 10,
-                positionY: positionY + 400
-            });
-        }
-    }
+		if (this.state.filteredItems === undefined) {
+			return;
+		}
+
+		let items, positionY, recordsCount;
+		recordsCount = this.state.recordsCount;
+		positionY = this.state.positionY;
+		items = this.state.filteredItems.slice(0, recordsCount);
+
+		if (event.nativeEvent.contentOffset.y >= positionY - 10) {
+			this.setState({
+				dataSource: this.state.dataSource.cloneWithRows(items),
+				recordsCount: recordsCount + 10,
+				positionY: positionY + 500
+			});
+		}
+	}
 
     onChangeText(text) {
         if (this.state.responseData == undefined) {
@@ -195,16 +209,6 @@ class Music extends Component {
             searchQuery: text
         })
     }
-
-	refreshDataAndroid() {
-		this.setState({
-			showProgress: true
-		});
-
-		setTimeout(() => {
-			this.getItems()
-		}, 1000);
-	}
 
 	clearSearchQuery() {
         this.setState({
@@ -320,16 +324,10 @@ class Music extends Component {
 
                 {loader}
 
-				<ScrollView onScroll={this.refreshData.bind(this)} scrollEventThrottle={16}
-					refreshControl={
-						<RefreshControl
-							enabled={true}
-							refreshing={this.state.refreshing}
-							onRefresh={this.refreshDataAndroid.bind(this)}
-						/>
-					}
-				>
+				<ScrollView
+					onScroll={this.refreshData.bind(this)} scrollEventThrottle={16}>
 					<ListView
+						style={styles.scroll}
 						enableEmptySections={true}
 						dataSource={this.state.dataSource}
 						renderRow={this.renderRow.bind(this)}
