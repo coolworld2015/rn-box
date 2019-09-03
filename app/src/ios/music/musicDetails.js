@@ -7,12 +7,9 @@ import {
     View,
     Image,
     TouchableHighlight,
-    ListView,
     ScrollView,
-    ActivityIndicator,
-    TextInput,
     AsyncStorage,
-    Alert,
+    Alert
 } from 'react-native';
 
 class MusicDetails extends Component {
@@ -35,14 +32,14 @@ class MusicDetails extends Component {
                     text: 'OK', onPress: () => {
                         this.deleteMusic();
                     }
-                },
+                }
             ]
-        );
+        )
     }
 
     deleteMusic() {
-        var id = this.state.pushEvent.trackId;
-        var music = [];
+        let id = this.state.pushEvent.trackId;
+        let music = [];
 
         AsyncStorage.getItem('rn-box.music')
             .then(req => JSON.parse(req))
@@ -50,8 +47,8 @@ class MusicDetails extends Component {
 
                 music = [].concat(json);
 
-                for (var i = 0; i < music.length; i++) {
-                    if (music[i].trackId == id) {
+                for (let i = 0; i < music.length; i++) {
+                    if (music[i].trackId === id) {
                         music.splice(i, 1);
                         break;
                     }
@@ -62,8 +59,7 @@ class MusicDetails extends Component {
                             appConfig.music.refresh = true;
                             this.props.navigation.navigate('Music', {refresh: true});
                         }
-                    );
-
+                    )
             })
             .catch(error => console.log(error))
     }
@@ -81,7 +77,7 @@ class MusicDetails extends Component {
     }
 
     render() {
-        var image = <View/>;
+        let image = <View/>;
 
         if (this.state.pushEvent) {
             if (this.state.pushEvent.artworkUrl100) {
@@ -93,7 +89,7 @@ class MusicDetails extends Component {
                         borderRadius: 10,
                         margin: 5
                     }}
-                />;
+                />
             } else {
                 image = <Image
                     source={{uri: this.state.pushEvent.pic}}
@@ -103,7 +99,7 @@ class MusicDetails extends Component {
                         borderRadius: 20,
                         margin: 20
                     }}
-                />;
+                />
             }
         }
 
@@ -113,8 +109,7 @@ class MusicDetails extends Component {
                     <View>
                         <TouchableHighlight
                             onPress={() => this.goBack()}
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textSmall}>
                                 Back
                             </Text>
@@ -122,8 +117,7 @@ class MusicDetails extends Component {
                     </View>
                     <View style={styles.itemWrap}>
                         <TouchableHighlight
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textLarge}>
                                 {this.state.pushEvent.trackName}
                             </Text>
@@ -132,8 +126,7 @@ class MusicDetails extends Component {
                     <View>
                         <TouchableHighlight
                             onPress={() => this.deleteMusicDialog()}
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textSmall}>
                                 Delete
                             </Text>
@@ -152,8 +145,7 @@ class MusicDetails extends Component {
                         <View style={{alignItems: 'center'}}>
                             <TouchableHighlight
                                 onPress={() => this.playTrack()}
-                                underlayColor='darkblue'
-                            >
+                                underlayColor='darkblue'>
                                 {image}
                             </TouchableHighlight>
                         </View>
@@ -189,7 +181,7 @@ class MusicDetails extends Component {
                     </View>
                 </ScrollView>
             </View>
-        );
+        )
     }
 }
 
@@ -231,8 +223,7 @@ const styles = StyleSheet.create({
     },
     itemWrap: {
         flex: 1,
-        flexDirection: 'column',
-        //flexWrap: 'wrap'
+        flexDirection: 'column'
     },
     itemTextBold: {
         fontSize: 25,
@@ -240,8 +231,6 @@ const styles = StyleSheet.create({
         margin: 7,
         fontWeight: 'bold',
         color: 'black',
-        /*        fontFamily: 'Cursive',
-                fontStyle: 'italic'*/
     },
     itemText: {
         fontSize: 20,
@@ -260,7 +249,6 @@ const styles = StyleSheet.create({
     },
     button: {
         height: 50,
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderColor: '#48BBEC',
         alignSelf: 'stretch',

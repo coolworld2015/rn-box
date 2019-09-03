@@ -23,8 +23,8 @@ class Movies extends Component {
     constructor(props) {
         super(props);
 
-        var ds = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 != r2
+        let ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
         });
 
         this.state = {
@@ -37,12 +37,6 @@ class Movies extends Component {
             refreshing: false,
             width: Dimensions.get('window').width
         };
-    }
-
-    componentDidMount() {
-        this.setState({
-            width: Dimensions.get('window').width
-        });
         this.getItems();
     }
 
@@ -78,26 +72,26 @@ class Movies extends Component {
                         resultsCount: json.length,
                         responseData: json.sort(this.sort),
                         filteredItems: json.sort(this.sort)
-                    });
+                    })
                 }
             })
             .catch(error => console.log(error))
             .finally(() => {
                 this.setState({
                     showProgress: false
-                });
-            });
+                })
+            })
     }
 
     sort(a, b) {
-        var nameA = a.trackName.toLowerCase(), nameB = b.trackName.toLowerCase();
+        let nameA = a.trackName.toLowerCase(), nameB = b.trackName.toLowerCase();
         if (nameA < nameB) {
             return -1
         }
         if (nameA > nameB) {
             return 1
         }
-        return 0;
+        return 0
     }
 
     showDetails(rowData) {
@@ -106,26 +100,25 @@ class Movies extends Component {
     }
 
     renderRow(rowData) {
-        var image;
+        let image;
         if (rowData) {
             if (rowData.artworkUrl100) {
                 image = <Image
                     source={{uri: rowData.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg')}}
                     style={styles.img}
-                />;
+                />
             } else {
                 image = <Image
                     source={{uri: rowData.pic}}
                     style={styles.img}
-                />;
+                />
             }
         }
 
         return (
             <TouchableHighlight
                 onPress={() => this.showDetails(rowData)}
-                underlayColor='#ddd'
-            >
+                underlayColor='#ddd'>
                 <View style={styles.imgsList}>
 
                     {image}
@@ -153,12 +146,12 @@ class Movies extends Component {
                     </View>
                 </View>
             </TouchableHighlight>
-        );
+        )
     }
 
     refreshData(event) {
         if (this.state.showProgress === true) {
-            return;
+            return
         }
 
         if (event.nativeEvent.contentOffset.y <= -100) {
@@ -172,11 +165,11 @@ class Movies extends Component {
 
             setTimeout(() => {
                 this.getItems();
-            }, 300);
+            }, 300)
         }
 
         if (this.state.filteredItems === undefined) {
-            return;
+            return
         }
 
         let items, positionY, recordsCount;
@@ -189,13 +182,13 @@ class Movies extends Component {
                 dataSource: this.state.dataSource.cloneWithRows(items),
                 recordsCount: recordsCount + 10,
                 positionY: positionY + 500
-            });
+            })
         }
     }
 
     onChangeText(text) {
         if (this.state.responseData === undefined) {
-            return;
+            return
         }
 
         let arr = [].concat(this.state.responseData);
@@ -216,7 +209,7 @@ class Movies extends Component {
             positionY: 0,
             recordsCount: 15,
             searchQuery: ''
-        });
+        })
     }
 
     render() {
@@ -225,7 +218,7 @@ class Movies extends Component {
         if (this.state.serverError) {
             errorCtrl = <Text style={styles.error}>
                 Something went wrong.
-            </Text>;
+            </Text>
         }
 
         if (this.state.showProgress) {
@@ -235,7 +228,7 @@ class Movies extends Component {
                     color="darkblue"
                     animating={true}
                 />
-            </View>;
+            </View>
         }
 
         if (this.state.searchQuery.length > 0) {
@@ -246,7 +239,7 @@ class Movies extends Component {
                     width: 20,
                     marginTop: 10
                 }}
-            />;
+            />
         }
 
         return (
@@ -255,17 +248,14 @@ class Movies extends Component {
                     <View>
                         <TouchableHighlight
                             onPress={() => this.refreshDataAndroid()}
-                            underlayColor='#ddd'
-                        >
+                            underlayColor='#ddd'>
                             <Text style={styles.textSmall}>
-
                             </Text>
                         </TouchableHighlight>
                     </View>
                     <View>
                         <TouchableHighlight
-                            underlayColor='#ddd'
-                        >
+                            underlayColor='#ddd'>
                             <Text style={styles.textLarge}>
                                 Movies
                             </Text>
@@ -273,8 +263,7 @@ class Movies extends Component {
                     </View>
                     <View>
                         <TouchableHighlight
-                            underlayColor='#ddd'
-                        >
+                            underlayColor='#ddd'>
                             <Text style={styles.textSmall}>
                             </Text>
                         </TouchableHighlight>
@@ -293,7 +282,7 @@ class Movies extends Component {
                                 borderWidth: 3,
                                 borderColor: 'white',
                                 borderRadius: 0,
-                                width: this.state.width * .90,
+                                width: this.state.width * .90
                             }}
                             value={this.state.searchQuery}
                             placeholder="Search here">
@@ -306,11 +295,10 @@ class Movies extends Component {
                         borderColor: 'white',
                         marginLeft: -10,
                         paddingLeft: 5,
-                        width: this.state.width * .10,
+                        width: this.state.width * .10
                     }}>
                         <TouchableWithoutFeedback
-                            onPress={() => this.clearSearchQuery()}
-                        >
+                            onPress={() => this.clearSearchQuery()}>
                             <View>
                                 {image}
                             </View>
@@ -328,8 +316,7 @@ class Movies extends Component {
                         style={styles.scroll}
                         enableEmptySections={true}
                         dataSource={this.state.dataSource}
-                        renderRow={this.renderRow.bind(this)}
-                    />
+                        renderRow={this.renderRow.bind(this)}/>
                 </ScrollView>
 
                 <View>
@@ -350,7 +337,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderColor: '#D7D7D7',
         borderBottomWidth: 1,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
     },
     iconForm: {
         flexDirection: 'row',
@@ -389,7 +376,6 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderWidth: 0,
         borderColor: 'whitesmoke'
@@ -437,7 +423,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 10,
         borderColor: '#D7D7D7',
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         color: 'white',
         fontWeight: 'bold'

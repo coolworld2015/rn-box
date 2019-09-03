@@ -11,10 +11,8 @@ import {
     ActivityIndicator,
     TextInput,
     AsyncStorage,
-    Alert,
     Image,
-    Dimensions,
-    RefreshControl
+    Dimensions
 } from 'react-native';
 
 import ListView from 'deprecated-react-native-listview';
@@ -23,8 +21,8 @@ class Music extends Component {
     constructor(props) {
         super(props);
 
-        var ds = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 != r2
+        let ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
         });
 
         this.state = {
@@ -37,12 +35,6 @@ class Music extends Component {
             refreshing: false,
             width: Dimensions.get('window').width
         };
-    }
-
-    componentDidMount() {
-        this.setState({
-            width: Dimensions.get('window').width
-        });
         this.getItems();
     }
 
@@ -78,26 +70,26 @@ class Music extends Component {
                         resultsCount: json.length,
                         responseData: json.sort(this.sort),
                         filteredItems: json.sort(this.sort)
-                    });
+                    })
                 }
             })
             .catch(error => console.log(error))
             .finally(() => {
                 this.setState({
                     showProgress: false
-                });
-            });
+                })
+            })
     }
 
     sort(a, b) {
-        var nameA = a.trackName.toLowerCase(), nameB = b.trackName.toLowerCase();
+        let nameA = a.trackName.toLowerCase(), nameB = b.trackName.toLowerCase();
         if (nameA < nameB) {
             return -1
         }
         if (nameA > nameB) {
             return 1
         }
-        return 0;
+        return 0
     }
 
     showDetails(rowData) {
@@ -106,26 +98,25 @@ class Music extends Component {
     }
 
     renderRow(rowData) {
-        var image;
+        let image;
         if (rowData) {
             if (rowData.artworkUrl100) {
                 image = <Image
                     source={{uri: rowData.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg')}}
                     style={styles.img}
-                />;
+                />
             } else {
                 image = <Image
                     source={{uri: rowData.pic}}
                     style={styles.img}
-                />;
+                />
             }
         }
 
         return (
             <TouchableHighlight
                 onPress={() => this.showDetails(rowData)}
-                underlayColor='#ddd'
-            >
+                underlayColor='#ddd'>
                 <View style={styles.imgsList}>
 
                     {image}

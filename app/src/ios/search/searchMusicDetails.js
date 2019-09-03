@@ -7,12 +7,8 @@ import {
     View,
     Image,
     TouchableHighlight,
-    ListView,
     ScrollView,
-    ActivityIndicator,
-    TextInput,
-    AsyncStorage,
-    Alert,
+    AsyncStorage
 } from 'react-native';
 
 class SearchMusicDetails extends Component {
@@ -42,8 +38,7 @@ class SearchMusicDetails extends Component {
                             appConfig.music.refresh = true;
                             this.props.navigation.goBack();
                         }
-                    );
-
+                    )
             })
             .catch(error => console.log(error));
     }
@@ -61,7 +56,7 @@ class SearchMusicDetails extends Component {
     }
 
     render() {
-        var image = <View/>;
+        let image = <View/>;
 
         if (this.state.pushEvent) {
             if (this.state.pushEvent.artworkUrl100) {
@@ -73,7 +68,7 @@ class SearchMusicDetails extends Component {
                         borderRadius: 10,
                         margin: 5
                     }}
-                />;
+                />
             } else {
                 image = <Image
                     source={{uri: this.state.pushEvent.pic}}
@@ -83,7 +78,7 @@ class SearchMusicDetails extends Component {
                         borderRadius: 20,
                         margin: 20
                     }}
-                />;
+                />
             }
         }
 
@@ -93,8 +88,7 @@ class SearchMusicDetails extends Component {
                     <View>
                         <TouchableHighlight
                             onPress={() => this.goBack()}
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textSmall}>
                                 Back
                             </Text>
@@ -102,8 +96,7 @@ class SearchMusicDetails extends Component {
                     </View>
                     <View style={styles.itemWrap}>
                         <TouchableHighlight
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textLarge}>
                                 {this.state.pushEvent.trackName}
                             </Text>
@@ -112,8 +105,7 @@ class SearchMusicDetails extends Component {
                     <View>
                         <TouchableHighlight
                             onPress={() => this.localStorageInsert()}
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textSmall}>
                                 Add
                             </Text>
@@ -132,8 +124,7 @@ class SearchMusicDetails extends Component {
                         <View style={{alignItems: 'center'}}>
                             <TouchableHighlight
                                 onPress={() => this.playTrack()}
-                                underlayColor='darkblue'
-                            >
+                                underlayColor='darkblue'>
                                 {image}
                             </TouchableHighlight>
                         </View>
@@ -169,7 +160,7 @@ class SearchMusicDetails extends Component {
                     </View>
                 </ScrollView>
             </View>
-        );
+        )
     }
 }
 
@@ -182,7 +173,6 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderWidth: 0,
         borderColor: 'whitesmoke'
@@ -212,7 +202,6 @@ const styles = StyleSheet.create({
     itemWrap: {
         flex: 1,
         flexDirection: 'column',
-        //flexWrap: 'wrap'
     },
     itemTextBold: {
         fontSize: 25,
@@ -220,8 +209,6 @@ const styles = StyleSheet.create({
         margin: 7,
         fontWeight: 'bold',
         color: 'black',
-        /*        fontFamily: 'Cursive',
-                fontStyle: 'italic'*/
     },
     itemText: {
         fontSize: 20,
@@ -240,7 +227,6 @@ const styles = StyleSheet.create({
     },
     button: {
         height: 50,
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderColor: '#48BBEC',
         alignSelf: 'stretch',

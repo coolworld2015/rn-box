@@ -10,11 +10,8 @@ import {
     ScrollView,
     ActivityIndicator,
     TextInput,
-    AsyncStorage,
-    Alert,
     Image,
-    Dimensions,
-    RefreshControl,
+    Dimensions
 } from 'react-native';
 
 import ListView from 'deprecated-react-native-listview';
@@ -23,37 +20,24 @@ class SearchMoviesResults extends Component {
     constructor(props) {
         super(props);
 
-        /*        BackAndroid.addEventListener('hardwareBackPress', () => {
-                    if (this.props.navigator) {
-                        this.props.navigator.pop();
-                    }
-                    return true;
-                });*/
-
-        var ds = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 != r2
+        let ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
         });
 
         this.state = {
             dataSource: ds.cloneWithRows([]),
             searchQuery: '',
-            width: Dimensions.get('window').width,
             searchType: appConfig.item.searchType,
             searchQueryHttp: appConfig.item.searchQuery,
             showProgress: true,
             resultsCount: 0,
             recordsCount: 15,
             positionY: 0,
-            refreshing: false
-        };
-
-    }
-
-    componentDidMount() {
-        this.setState({
+            refreshing: false,
             width: Dimensions.get('window').width
-        });
+        };
         this.getItems();
+
     }
 
     getItems() {
@@ -175,10 +159,10 @@ class SearchMoviesResults extends Component {
 
     onChangeText(text) {
         if (this.state.responseData === undefined) {
-            return;
+            return
         }
-        var arr = [].concat(this.state.responseData);
-        var items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) >= 0);
+        let arr = [].concat(this.state.responseData);
+        let items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) >= 0);
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(items),
             resultsCount: items.length,
@@ -208,7 +192,7 @@ class SearchMoviesResults extends Component {
         if (this.state.serverError) {
             errorCtrl = <Text style={styles.error}>
                 Something went wrong.
-            </Text>;
+            </Text>
         }
 
         if (this.state.showProgress) {
@@ -218,7 +202,7 @@ class SearchMoviesResults extends Component {
                     color="darkblue"
                     animating={true}
                 />
-            </View>;
+            </View>
         }
 
         if (this.state.searchQuery.length > 0) {
@@ -229,7 +213,7 @@ class SearchMoviesResults extends Component {
                     width: 20,
                     marginTop: 10
                 }}
-            />;
+            />
         }
 
         return (
@@ -238,8 +222,7 @@ class SearchMoviesResults extends Component {
                     <View>
                         <TouchableHighlight
                             onPress={() => this.goBack()}
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textSmall}>
                                 Back
                             </Text>
@@ -247,8 +230,7 @@ class SearchMoviesResults extends Component {
                     </View>
                     <View style={styles.itemWrap}>
                         <TouchableHighlight
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textLarge}>
                                 {this.state.searchQueryHttp}
                             </Text>
@@ -256,8 +238,7 @@ class SearchMoviesResults extends Component {
                     </View>
                     <View>
                         <TouchableHighlight
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textSmall}>
                             </Text>
                         </TouchableHighlight>
@@ -292,8 +273,7 @@ class SearchMoviesResults extends Component {
                         width: Dimensions.get('window').width * .10,
                     }}>
                         <TouchableWithoutFeedback
-                            onPress={() => this.clearSearchQuery()}
-                        >
+                            onPress={() => this.clearSearchQuery()}>
                             <View>
                                 {image}
                             </View>
@@ -311,8 +291,7 @@ class SearchMoviesResults extends Component {
                         style={styles.scroll}
                         enableEmptySections={true}
                         dataSource={this.state.dataSource}
-                        renderRow={this.renderRow.bind(this)}
-                    />
+                        renderRow={this.renderRow.bind(this)}/>
                 </ScrollView>
 
                 <View>
@@ -333,7 +312,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderColor: '#D7D7D7',
         borderBottomWidth: 1,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
     },
     iconForm: {
         flexDirection: 'row',
@@ -373,7 +352,6 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderWidth: 0,
         borderColor: 'whitesmoke'
@@ -421,7 +399,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 10,
         borderColor: '#D7D7D7',
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         color: 'white',
         fontWeight: 'bold'

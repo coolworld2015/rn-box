@@ -160,7 +160,7 @@ class SearchMoviesDetails extends Component {
                     </View>
                 </ScrollView>
             </View>
-        );
+        )
     }
 }
 
@@ -173,7 +173,6 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderWidth: 0,
         borderColor: 'whitesmoke'
@@ -235,7 +234,6 @@ const styles = StyleSheet.create({
     },
     button: {
         height: 50,
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderColor: '#48BBEC',
         alignSelf: 'stretch',

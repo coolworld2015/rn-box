@@ -11,8 +11,7 @@ import {
     ActivityIndicator,
     TextInput,
     Image,
-    Dimensions,
-    RefreshControl,
+    Dimensions
 } from 'react-native';
 
 import ListView from 'deprecated-react-native-listview';
@@ -21,7 +20,7 @@ class SearchMusicResults extends Component {
     constructor(props) {
         super(props);
 
-        var ds = new ListView.DataSource({
+        let ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
         });
 
@@ -66,18 +65,18 @@ class SearchMusicResults extends Component {
                     resultsCount: responseData.results.length,
                     responseData: responseData.results,
                     filteredItems: responseData.results
-                });
+                })
             })
             .catch((error) => {
                 this.setState({
                     serverError: true
-                });
+                })
             })
             .finally(() => {
                 this.setState({
                     showProgress: false
-                });
-            });
+                })
+            })
     }
 
     pressRow(rowData) {
@@ -89,13 +88,11 @@ class SearchMusicResults extends Component {
         return (
             <TouchableHighlight
                 onPress={() => this.pressRow(rowData)}
-                underlayColor='#ddd'
-            >
+                underlayColor='#ddd'>
                 <View style={styles.imgsList}>
                     <Image
                         source={{uri: rowData.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg')}}
-                        style={styles.img}
-                    />
+                        style={styles.img}/>
                     <View style={styles.textBlock}>
                         <Text style={styles.textItemBold}>
                             {rowData.trackName}
@@ -119,7 +116,7 @@ class SearchMusicResults extends Component {
                     </View>
                 </View>
             </TouchableHighlight>
-        );
+        )
     }
 
     refreshData(event) {
@@ -155,7 +152,7 @@ class SearchMusicResults extends Component {
                 dataSource: this.state.dataSource.cloneWithRows(items),
                 recordsCount: recordsCount + 10,
                 positionY: positionY + 500
-            });
+            })
         }
     }
 
@@ -163,24 +160,14 @@ class SearchMusicResults extends Component {
         if (this.state.responseData === undefined) {
             return;
         }
-        var arr = [].concat(this.state.responseData);
-        var items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) >= 0);
+        let arr = [].concat(this.state.responseData);
+        let items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) >= 0);
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(items),
             resultsCount: items.length,
             filteredItems: items,
             searchQuery: text
         })
-    }
-
-    refreshDataAndroid() {
-        this.setState({
-            showProgress: true
-        });
-
-        setTimeout(() => {
-            this.getItems()
-        }, 1000);
     }
 
     clearSearchQuery() {
@@ -191,7 +178,7 @@ class SearchMusicResults extends Component {
             positionY: 0,
             recordsCount: 15,
             searchQuery: ''
-        });
+        })
     }
 
     goBack() {
@@ -204,7 +191,7 @@ class SearchMusicResults extends Component {
         if (this.state.serverError) {
             errorCtrl = <Text style={styles.error}>
                 Something went wrong.
-            </Text>;
+            </Text>
         }
 
         if (this.state.showProgress) {
@@ -214,7 +201,7 @@ class SearchMusicResults extends Component {
                     color="darkblue"
                     animating={true}
                 />
-            </View>;
+            </View>
         }
 
         if (this.state.searchQuery.length > 0) {
@@ -225,7 +212,7 @@ class SearchMusicResults extends Component {
                     width: 20,
                     marginTop: 10
                 }}
-            />;
+            />
         }
 
         return (
@@ -234,8 +221,7 @@ class SearchMusicResults extends Component {
                     <View>
                         <TouchableHighlight
                             onPress={() => this.goBack()}
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textSmall}>
                                 Back
                             </Text>
@@ -243,8 +229,7 @@ class SearchMusicResults extends Component {
                     </View>
                     <View style={styles.itemWrap}>
                         <TouchableHighlight
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textLarge}>
                                 {this.state.searchQueryHttp}
                             </Text>
@@ -252,8 +237,7 @@ class SearchMusicResults extends Component {
                     </View>
                     <View>
                         <TouchableHighlight
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textSmall}>
                             </Text>
                         </TouchableHighlight>
@@ -288,8 +272,7 @@ class SearchMusicResults extends Component {
                         width: Dimensions.get('window').width * .10,
                     }}>
                         <TouchableWithoutFeedback
-                            onPress={() => this.clearSearchQuery()}
-                        >
+                            onPress={() => this.clearSearchQuery()}>
                             <View>
                                 {image}
                             </View>
@@ -307,8 +290,7 @@ class SearchMusicResults extends Component {
                         style={styles.scroll}
                         enableEmptySections={true}
                         dataSource={this.state.dataSource}
-                        renderRow={this.renderRow.bind(this)}
-                    />
+                        renderRow={this.renderRow.bind(this)}/>
                 </ScrollView>
 
                 <View>
@@ -369,7 +351,6 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderWidth: 0,
         borderColor: 'whitesmoke'
@@ -417,7 +398,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 10,
         borderColor: '#D7D7D7',
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         color: 'white',
         fontWeight: 'bold'

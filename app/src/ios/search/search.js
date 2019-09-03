@@ -122,7 +122,7 @@ class Search extends Component {
         if (this.state.invalidValue) {
             validCtrl = <Text style={styles.error}>
                 Value required - please provide.
-            </Text>;
+            </Text>
         }
 
         if (this.state.eventSwitchBaseType) {
@@ -139,12 +139,12 @@ class Search extends Component {
                             this.toggleTypeChangeMovies();
                             this.setState({
                                 eventSwitchBaseMovies: value
-                            });
+                            })
                         }}
                         value={this.state.eventSwitchBaseMovies}
                     />
                 </View>
-            </View>;
+            </View>
         } else {
             showBlock = <View style={styles.switchBlock}>
                 <View>
@@ -159,12 +159,12 @@ class Search extends Component {
                             this.toggleTypeChange();
                             this.setState({
                                 eventSwitchBase: value
-                            });
+                            })
                         }}
                         value={this.state.eventSwitchBase}
                     />
                 </View>
-            </View>;
+            </View>
         }
 
         return (
@@ -282,7 +282,6 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderWidth: 0,
         borderColor: 'whitesmoke'
@@ -312,7 +311,6 @@ const styles = StyleSheet.create({
     switchBlock: {
         height: 50,
         borderWidth: 1,
-        //borderColor: '#48BBEC',
         borderColor: 'darkblue',
         flex: 1,
         flexDirection: 'row',
@@ -334,7 +332,6 @@ const styles = StyleSheet.create({
         height: 50,
         marginTop: 0,
         borderWidth: 1,
-        //borderColor: '#48BBEC',
         borderColor: 'darkblue',
         flex: 1,
         flexDirection: 'row',
@@ -344,7 +341,6 @@ const styles = StyleSheet.create({
     },
     button: {
         height: 50,
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderColor: '#48BBEC',
         alignSelf: 'stretch',
@@ -369,7 +365,6 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     banner: {
-        //borderWidth: 1,
         borderColor: 'darkblue'
     },
 });
