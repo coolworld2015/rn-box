@@ -37,16 +37,18 @@ class Movies extends Component {
             refreshing: false,
             width: Dimensions.get('window').width
         };
-    }
-
-    componentDidMount() {
-        this.setState({
-            width: Dimensions.get('window').width
-        });
         this.getItems();
     }
 
-    componentWillUpdate() {
+    componentDidMount() {
+        console.log(this.props.navigator.addListenerOn)
+        /*this.didFocusListener = this.props.navigator.addListenerOn(
+            'didFocus',
+            () => { this.ComponentUpdate(); console.log('did focus') },
+        ).bind(this);*/
+    }
+
+    ComponentUpdate() {
         if (appConfig.movies.refresh) {
             appConfig.movies.refresh = false;
 
