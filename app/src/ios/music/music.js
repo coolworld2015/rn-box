@@ -38,7 +38,16 @@ class Music extends Component {
         this.getItems();
     }
 
-    componentWillUpdate() {
+    componentDidMount() {
+        this.didFocusListener = this.props.navigation.addListener(
+            'didFocus',
+            () => {
+                this.refreshComponent()
+            }
+        )
+    }
+
+    refreshComponent() {
         if (appConfig.music.refresh) {
             appConfig.music.refresh = false;
 
@@ -48,7 +57,7 @@ class Music extends Component {
 
             setTimeout(() => {
                 this.getItems()
-            }, 1000);
+            }, 500);
         }
     }
 

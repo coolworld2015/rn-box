@@ -43,26 +43,24 @@ class Movies extends Component {
     componentDidMount() {
         this.didFocusListener = this.props.navigation.addListener(
             'didFocus',
-            () => { this.ComponentUpdate(); console.log('did focus') },
-        );
+            () => {
+                this.refreshComponent()
+            }
+        )
     }
 
-    ComponentUpdate() {
-        console.log(appConfig.movies.refresh)
+    refreshComponent() {
+        if (appConfig.movies.refresh) {
+            appConfig.movies.refresh = false;
 
-            if (appConfig.movies.refresh) {
-                appConfig.movies.refresh = false;
+            this.setState({
+                showProgress: true
+            });
 
-                this.setState({
-                    showProgress: true
-                });
-
-                setTimeout(() => {
-                    this.getItems()
-                }, 500);
-            }
-            return true
-
+            setTimeout(() => {
+                this.getItems()
+            }, 500);
+        }
     }
 
     getItems() {
