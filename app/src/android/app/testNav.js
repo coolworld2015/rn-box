@@ -1,14 +1,11 @@
 import React from 'react';
 import {
-    createBottomTabNavigator,
     createStackNavigator,
     createAppContainer,
     createMaterialTopTabNavigator
 } from 'react-navigation';
 
 import {StackViewStyleInterpolator} from 'react-navigation-stack';
-
-import {Image} from 'react-native';
 
 import Search from '../search/search';
 import searchMusicResults from '../../ios/search/searchMusicResults';
@@ -34,10 +31,11 @@ const SearchTab = createStackNavigator({
         playTrack
     }, {
         headerMode: 'none',
-        mode: 'modal',
-        defaultNavigationOptions: {
-            gesturesEnabled: false,
-        }
+        transitionConfig: () => ({
+            screenInterpolator: sceneProps => {
+                return StackViewStyleInterpolator.forHorizontal(sceneProps);
+            }
+        })
     }
 );
 
@@ -56,21 +54,27 @@ const MoviesTab = createStackNavigator({
 );
 
 const MusicTab = createStackNavigator({
-    Music,
-    musicDetails,
-    playTrack
-});
+        Music,
+        musicDetails,
+        playTrack
+    }, {
+        headerMode: 'none',
+        transitionConfig: () => ({
+            screenInterpolator: sceneProps => {
+                return StackViewStyleInterpolator.forHorizontal(sceneProps);
+            }
+        })
+    }
+);
 
 const tabBarOptions = {
     style: {
-        backgroundColor: 'white',
-
+        backgroundColor: 'white'
     },
     labelStyle: {
         color: 'darkblue',
         fontWeight: 'bold'
     },
-
     upperCaseLabel: false,
     indicatorStyle: {backgroundColor: 'darkblue'},
 };
