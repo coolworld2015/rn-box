@@ -41,7 +41,7 @@ class Movies extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.navigator.addListenerOn)
+        //console.log(this.props.navigator.addListenerOn)
         /*this.didFocusListener = this.props.navigator.addListenerOn(
             'didFocus',
             () => { this.ComponentUpdate(); console.log('did focus') },
