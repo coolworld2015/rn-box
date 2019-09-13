@@ -303,8 +303,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
-        borderTopWidth: 1,
-        borderColor: 'white'
+        borderWidth: 0,
+        borderColor: 'whitesmoke'
     },
     textSmall: {
         fontSize: 16,

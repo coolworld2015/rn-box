@@ -7,12 +7,14 @@ import {
     View,
     Image,
     TouchableHighlight,
+    ListView,
     ScrollView,
+    ActivityIndicator,
     AsyncStorage,
     Alert,
 } from 'react-native';
 
-class MoviesDetails extends Component {
+class MusicDetails extends Component {
     constructor(props) {
         super(props);
 
@@ -24,14 +26,23 @@ class MoviesDetails extends Component {
                 });	*/
 
         this.state = {
-            pushEvent: appConfig.item
+            pushEvent: {
+                trackName: '',
+                releaseDate: ' - '
+            }
+        };
+
+        if (props.data) {
+            this.state = {
+                pushEvent: props.data
+            };
         }
     }
 
     deleteMovieDialog() {
         Alert.alert(
-            'Delete movie',
-            'Are you sure you want to delete movie ' + this.state.pushEvent.trackName + '?',
+            'Delete music',
+            'Are you sure you want to delete music ' + this.state.pushEvent.trackName + '?',
             [
                 {text: 'Cancel', onPress: () => console.log('Cancel Pressed!')},
                 {
@@ -45,25 +56,25 @@ class MoviesDetails extends Component {
 
     deleteMovie(id) {
         var id = this.state.pushEvent.trackId;
-        var movies = [];
+        var music = [];
 
-        AsyncStorage.getItem('rn-box.movies')
+        AsyncStorage.getItem('rn-box.music')
             .then(req => JSON.parse(req))
             .then(json => {
 
-                movies = [].concat(json);
+                music = [].concat(json);
 
-                for (var i = 0; i < movies.length; i++) {
-                    if (movies[i].trackId == id) {
-                        movies.splice(i, 1);
+                for (var i = 0; i < music.length; i++) {
+                    if (music[i].trackId == id) {
+                        music.splice(i, 1);
                         break;
                     }
                 }
 
-                AsyncStorage.setItem('rn-box.movies', JSON.stringify(movies))
+                AsyncStorage.setItem('rn-box.music', JSON.stringify(music))
                     .then(json => {
-                            appConfig.movies.refresh = true;
-                            this.props.navigation.navigate('Movies', {refresh: true})
+                            appConfig.music.refresh = true;
+                            this.props.navigator.pop();
                         }
                     );
 
@@ -72,15 +83,17 @@ class MoviesDetails extends Component {
     }
 
     playTrack() {
-        appConfig.item = {
-            name: this.state.pushEvent.trackName,
-            url: this.state.pushEvent.previewUrl
-        };
-        this.props.navigation.navigate('playTrack');
+        this.props.navigator.push({
+            index: 2,
+            data: {
+                name: this.state.pushEvent.trackName,
+                url: this.state.pushEvent.previewUrl
+            }
+        });
     }
 
     goBack() {
-        this.props.navigation.goBack();
+        this.props.navigator.pop();
     }
 
     render() {
@@ -116,21 +129,27 @@ class MoviesDetails extends Component {
                     <View>
                         <TouchableHighlight
                             onPress={() => this.goBack()}
-                            underlayColor='darkblue'>
+                            underlayColor='darkblue'
+                        >
                             <Text style={styles.textSmall}>
                                 Back
                             </Text>
                         </TouchableHighlight>
                     </View>
                     <View style={styles.itemWrap}>
-                        <Text style={styles.textLarge}>
-                            {this.state.pushEvent.trackName}
-                        </Text>
+                        <TouchableHighlight
+                            underlayColor='darkblue'
+                        >
+                            <Text style={styles.textLarge}>
+                                {this.state.pushEvent.trackName}
+                            </Text>
+                        </TouchableHighlight>
                     </View>
                     <View>
                         <TouchableHighlight
                             onPress={() => this.deleteMovieDialog()}
-                            underlayColor='darkblue'>
+                            underlayColor='darkblue'
+                        >
                             <Text style={styles.textSmall}>
                                 Delete
                             </Text>
@@ -149,7 +168,8 @@ class MoviesDetails extends Component {
                         <View style={{alignItems: 'center'}}>
                             <TouchableHighlight
                                 onPress={() => this.playTrack()}
-                                underlayColor='darkblue'>
+                                underlayColor='darkblue'
+                            >
                                 {image}
                             </TouchableHighlight>
                         </View>
@@ -172,10 +192,6 @@ class MoviesDetails extends Component {
 
                         <Text style={styles.itemTextSmallBold}>
                             {this.state.pushEvent.artistName}
-                        </Text>
-
-                        <Text style={styles.itemTextLeft}>
-                            {this.state.pushEvent.longDescription}
                         </Text>
 
                         <TouchableHighlight
@@ -204,8 +220,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
-        borderTopWidth: 1,
-        borderColor: 'white'
+        borderWidth: 0,
+        borderColor: 'whitesmoke'
     },
     textSmall: {
         fontSize: 16,
@@ -218,21 +234,9 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         margin: 10,
-        marginLeft: 0,
+        marginRight: 20,
         fontWeight: 'bold',
-        color: 'white',
-        //justifyContent: 'center',
-        //alignItems: 'center',
-        //backgroundColor: 'red'
-    },
-    itemWrap: {
-        flex: 1,
-        flexDirection: 'column',
-        textAlign: 'center',
-        //flexWrap: 'wrap',
-        justifyContent: 'center',
-        alignItems: 'center',
-        //backgroundColor: 'green'
+        color: 'white'
     },
     form: {
         flex: 1,
@@ -240,6 +244,11 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         paddingBottom: 130,
         backgroundColor: 'white'
+    },
+    itemWrap: {
+        flex: 1,
+        flexDirection: 'column',
+        //flexWrap: 'wrap'
     },
     itemTextBold: {
         fontSize: 18,
@@ -251,13 +260,6 @@ const styles = StyleSheet.create({
     itemText: {
         fontSize: 14,
         textAlign: 'center',
-        margin: 3,
-        marginLeft: 2,
-        color: 'black'
-    },
-    itemTextLeft: {
-        fontSize: 14,
-        textAlign: 'left',
         margin: 3,
         marginLeft: 2,
         color: 'black'
@@ -296,4 +298,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default MoviesDetails;
+export default MusicDetails;

@@ -8,19 +8,19 @@ import {
 import {StackViewStyleInterpolator} from 'react-navigation-stack';
 
 import Search from '../search/search';
-import searchMusicResults from '../search/searchMusicResults';
-import searchMusicDetails from '../search/searchMusicDetails';
+import searchMusicResults from '../../ios/search/searchMusicResults';
+import searchMusicDetails from '../../ios/search/searchMusicDetails';
 
-import searchMoviesResults from '../search/searchMoviesResults';
-import searchMoviesDetails from '../search/searchMoviesDetails';
+import searchMoviesResults from '../../ios/search/searchMoviesResults';
+import searchMoviesDetails from '../../ios/search/searchMoviesDetails';
 
-import Movies from '../movies/movies';
-import moviesDetails from '../movies/moviesDetails';
+import Movies from '../../ios/movies/movies';
+import moviesDetails from '../../ios/movies/moviesDetails';
 
-import Music from '../music/music';
-import musicDetails from '../music/musicDetails';
+import Music from '../../ios/music/music';
+import musicDetails from '../../ios/music/musicDetails';
 
-import playTrack from '../app/playTrack';
+import playTrack from '../../ios/app/playTrack';
 
 const SearchTab = createStackNavigator({
         Search,

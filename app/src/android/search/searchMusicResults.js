@@ -10,18 +10,23 @@ import {
     ScrollView,
     ActivityIndicator,
     TextInput,
-    AsyncStorage,
-    Alert,
     Image,
     Dimensions,
-    RefreshControl
+    RefreshControl,
 } from 'react-native';
 
 import ListView from 'deprecated-react-native-listview';
 
-class Music extends Component {
+class SearchMusicResults extends Component {
     constructor(props) {
         super(props);
+
+        /*		BackAndroid.addEventListener('hardwareBackPress', () => {
+                    if (this.props.navigator) {
+                        this.props.navigator.pop();
+                    }
+                    return true;
+                });	*/
 
         var ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 != r2
@@ -29,35 +34,25 @@ class Music extends Component {
 
         this.state = {
             dataSource: ds.cloneWithRows([]),
-            showProgress: true,
-            resultsCount: 0,
-            recordsCount: 15,
-            positionY: 0,
             searchQuery: '',
-            refreshing: false,
             width: Dimensions.get('window').width
         };
-    }
 
-    componentDidMount() {
-        this.setState({
-            width: Dimensions.get('window').width
-        });
-        this.getItems();
-    }
-
-    componentWillUpdate() {
-        if (appConfig.music.refresh) {
-            appConfig.music.refresh = false;
-
-            this.setState({
-                showProgress: true
-            });
-
-            setTimeout(() => {
-                this.getItems()
-            }, 1000);
+        if (props.data) {
+            this.state = {
+                dataSource: ds.cloneWithRows([]),
+                searchType: props.data.searchType,
+                searchQueryHttp: props.data.searchQuery,
+                showProgress: true,
+                resultsCount: 0,
+                recordsCount: 15,
+                positionY: 0,
+                searchQuery: '',
+                refreshing: false
+            }
         }
+
+        this.getItems();
     }
 
     getItems() {
@@ -69,19 +64,29 @@ class Music extends Component {
             searchQuery: ''
         });
 
-        AsyncStorage.getItem('rn-box.music')
-            .then(req => JSON.parse(req))
-            .then(json => {
-                if (json) {
-                    this.setState({
-                        dataSource: this.state.dataSource.cloneWithRows(json.sort(this.sort).slice(0, 5)),
-                        resultsCount: json.length,
-                        responseData: json.sort(this.sort),
-                        filteredItems: json.sort(this.sort)
-                    });
-                }
+        fetch('https://itunes.apple.com/search?media='
+            + this.state.searchType + '&term='
+            + this.state.searchQueryHttp, {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => response.json())
+            .then((responseData) => {
+                this.setState({
+                    dataSource: this.state.dataSource.cloneWithRows(responseData.results.slice(0, 5)),
+                    resultsCount: responseData.results.length,
+                    responseData: responseData.results,
+                    filteredItems: responseData.results
+                });
             })
-            .catch(error => console.log(error))
+            .catch((error) => {
+                this.setState({
+                    serverError: true
+                });
+            })
             .finally(() => {
                 this.setState({
                     showProgress: false
@@ -89,49 +94,24 @@ class Music extends Component {
             });
     }
 
-    sort(a, b) {
-        var nameA = a.trackName.toLowerCase(), nameB = b.trackName.toLowerCase();
-        if (nameA < nameB) {
-            return -1
-        }
-        if (nameA > nameB) {
-            return 1
-        }
-        return 0;
-    }
-
-    showDetails(rowData) {
+    pressRow(rowData) {
         this.props.navigator.push({
-            index: 1,
+            index: 11,
             data: rowData
         });
     }
 
     renderRow(rowData) {
-        var image;
-        if (rowData) {
-            if (rowData.artworkUrl100) {
-                image = <Image
-                    source={{uri: rowData.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg')}}
-                    style={styles.img}
-                />;
-            } else {
-                image = <Image
-                    source={{uri: rowData.pic}}
-                    style={styles.img}
-                />;
-            }
-        }
-
         return (
             <TouchableHighlight
-                onPress={() => this.showDetails(rowData)}
+                onPress={() => this.pressRow(rowData)}
                 underlayColor='#ddd'
             >
                 <View style={styles.imgsList}>
-
-                    {image}
-
+                    <Image
+                        source={{uri: rowData.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg')}}
+                        style={styles.img}
+                    />
                     <View style={styles.textBlock}>
                         <Text style={styles.textItemBold}>
                             {rowData.trackName}
@@ -182,12 +162,11 @@ class Music extends Component {
     }
 
     onChangeText(text) {
-        if (this.state.responseData == undefined) {
+        if (this.state.responseData === undefined) {
             return;
         }
-
         var arr = [].concat(this.state.responseData);
-        var items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) != -1);
+        var items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) >= 0);
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(items),
             resultsCount: items.length,
@@ -215,6 +194,10 @@ class Music extends Component {
             recordsCount: 15,
             searchQuery: ''
         });
+    }
+
+    goBack(rowData) {
+        this.props.navigator.pop();
     }
 
     render() {
@@ -252,26 +235,26 @@ class Music extends Component {
                 <View style={styles.header}>
                     <View>
                         <TouchableHighlight
-                            onPress={() => this.refreshDataAndroid()}
-                            underlayColor='#ddd'
+                            onPress={() => this.goBack()}
+                            underlayColor='darkblue'
                         >
                             <Text style={styles.textSmall}>
-
+                                Back
                             </Text>
                         </TouchableHighlight>
                     </View>
-                    <View>
+                    <View style={styles.itemWrap}>
                         <TouchableHighlight
-                            underlayColor='#ddd'
+                            underlayColor='darkblue'
                         >
                             <Text style={styles.textLarge}>
-                                Music
+                                {this.state.searchQueryHttp}
                             </Text>
                         </TouchableHighlight>
                     </View>
                     <View>
                         <TouchableHighlight
-                            underlayColor='#ddd'
+                            underlayColor='darkblue'
                         >
                             <Text style={styles.textSmall}>
                             </Text>
@@ -291,7 +274,7 @@ class Music extends Component {
                                 borderWidth: 3,
                                 borderColor: 'white',
                                 borderRadius: 0,
-                                width: this.state.width * .90,
+                                width: Dimensions.get('window').width * .90,
                             }}
                             value={this.state.searchQuery}
                             placeholder="Search here">
@@ -304,7 +287,7 @@ class Music extends Component {
                         borderColor: 'white',
                         marginLeft: -10,
                         paddingLeft: 5,
-                        width: this.state.width * .10,
+                        width: Dimensions.get('window').width * .10,
                     }}>
                         <TouchableWithoutFeedback
                             onPress={() => this.clearSearchQuery()}
@@ -395,8 +378,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
-        borderTopWidth: 1,
-        borderColor: 'white'
+        borderWidth: 0,
+        borderColor: 'whitesmoke'
     },
     textSmall: {
         fontSize: 16,
@@ -409,7 +392,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         margin: 10,
-        marginRight: 20,
+        marginRight: 40,
         fontWeight: 'bold',
         color: 'white'
     },
@@ -457,4 +440,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Music;
+export default SearchMusicResults;

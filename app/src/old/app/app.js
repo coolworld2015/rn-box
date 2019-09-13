@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 
 console.disableYellowBox = true;
 
-//import AppContainer from './appContainer';
+import AppContainer from './appContainer';
 import TestNav from './testNav';
 
 import Video from './video';

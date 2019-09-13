@@ -19,12 +19,18 @@ class PlayTrack extends Component {
         super(props);
 
         this.state = {
+            url: '',
             height: Dimensions.get('window').height,
-            width: Dimensions.get('window').width,
-            name: appConfig.item.name,
-            url: appConfig.item.url,
-            html: 'https://www.facebook.com/wikrcom/videos/1118835278260392/',
-            html1: 'https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'
+            width: Dimensions.get('window').width
+        };
+
+        if (props.data) {
+            this.state = {
+                name: props.data.name,
+                url: props.data.url,
+                html: 'https://www.facebook.com/wikrcom/videos/1118835278260392/',
+                html1: 'https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'
+            }
         }
     }
 
@@ -51,7 +57,7 @@ class PlayTrack extends Component {
                        style={styles.backgroundVideo}
                 />
 
-              {/*  <View style={styles.header}>
+                <View style={styles.header}>
                     <View>
                         <TouchableHighlight
                             onPress={() => this.goBack()}
@@ -81,7 +87,7 @@ class PlayTrack extends Component {
                             </View>
                         </TouchableHighlight>
                     </View>
-                </View>*/}
+                </View>
             </View>
 
         )

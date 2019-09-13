@@ -7,7 +7,9 @@ import {
     View,
     Image,
     TouchableHighlight,
+    ListView,
     ScrollView,
+    ActivityIndicator,
     AsyncStorage,
     Alert,
 } from 'react-native';
@@ -24,7 +26,16 @@ class MoviesDetails extends Component {
                 });	*/
 
         this.state = {
-            pushEvent: appConfig.item
+            pushEvent: {
+                trackName: '',
+                releaseDate: ' - '
+            }
+        };
+
+        if (props.data) {
+            this.state = {
+                pushEvent: props.data
+            };
         }
     }
 
@@ -63,7 +74,7 @@ class MoviesDetails extends Component {
                 AsyncStorage.setItem('rn-box.movies', JSON.stringify(movies))
                     .then(json => {
                             appConfig.movies.refresh = true;
-                            this.props.navigation.navigate('Movies', {refresh: true})
+                            this.props.navigator.pop();
                         }
                     );
 
@@ -72,15 +83,17 @@ class MoviesDetails extends Component {
     }
 
     playTrack() {
-        appConfig.item = {
-            name: this.state.pushEvent.trackName,
-            url: this.state.pushEvent.previewUrl
-        };
-        this.props.navigation.navigate('playTrack');
+        this.props.navigator.push({
+            index: 2,
+            data: {
+                name: this.state.pushEvent.trackName,
+                url: this.state.pushEvent.previewUrl
+            }
+        });
     }
 
     goBack() {
-        this.props.navigation.goBack();
+        this.props.navigator.pop();
     }
 
     render() {
@@ -204,8 +217,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
-        borderTopWidth: 1,
-        borderColor: 'white'
+        borderWidth: 0,
+        borderColor: 'whitesmoke'
     },
     textSmall: {
         fontSize: 16,

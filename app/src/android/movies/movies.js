@@ -103,10 +103,8 @@ class Movies extends Component {
     }
 
     showDetails(rowData) {
-        this.props.navigator.push({
-            index: 1,
-            data: rowData
-        });
+        appConfig.item = rowData;
+        this.props.navigation.navigate('moviesDetails');
     }
 
     renderRow(rowData) {
@@ -329,8 +327,7 @@ class Movies extends Component {
                                     refreshing={this.state.refreshing}
                                     onRefresh={this.refreshDataAndroid.bind(this)}
                                 />
-                            }
-                >
+                            }>
                     <ListView
                         enableEmptySections={true}
                         dataSource={this.state.dataSource}
@@ -397,8 +394,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
-        borderWidth: 0,
-        borderColor: 'whitesmoke'
+        borderTopWidth: 1,
+        borderColor: 'white'
     },
     textSmall: {
         fontSize: 16,

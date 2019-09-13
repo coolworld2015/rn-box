@@ -19,7 +19,7 @@ import {
 
 import ListView from 'deprecated-react-native-listview';
 
-class Music extends Component {
+class Movies extends Component {
     constructor(props) {
         super(props);
 
@@ -37,18 +37,20 @@ class Music extends Component {
             refreshing: false,
             width: Dimensions.get('window').width
         };
-    }
-
-    componentDidMount() {
-        this.setState({
-            width: Dimensions.get('window').width
-        });
         this.getItems();
     }
 
-    componentWillUpdate() {
-        if (appConfig.music.refresh) {
-            appConfig.music.refresh = false;
+    componentDidMount() {
+        //console.log(this.props.navigator.addListenerOn)
+        /*this.didFocusListener = this.props.navigator.addListenerOn(
+            'didFocus',
+            () => { this.ComponentUpdate(); console.log('did focus') },
+        ).bind(this);*/
+    }
+
+    ComponentUpdate() {
+        if (appConfig.movies.refresh) {
+            appConfig.movies.refresh = false;
 
             this.setState({
                 showProgress: true
@@ -69,7 +71,7 @@ class Music extends Component {
             searchQuery: ''
         });
 
-        AsyncStorage.getItem('rn-box.music')
+        AsyncStorage.getItem('rn-box.movies')
             .then(req => JSON.parse(req))
             .then(json => {
                 if (json) {
@@ -265,7 +267,7 @@ class Music extends Component {
                             underlayColor='#ddd'
                         >
                             <Text style={styles.textLarge}>
-                                Music
+                                Movies
                             </Text>
                         </TouchableHighlight>
                     </View>
@@ -395,8 +397,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
-        borderTopWidth: 1,
-        borderColor: 'white'
+        borderWidth: 0,
+        borderColor: 'whitesmoke'
     },
     textSmall: {
         fontSize: 16,
@@ -457,4 +459,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Music;
+export default Movies;
