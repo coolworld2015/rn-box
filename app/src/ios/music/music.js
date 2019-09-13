@@ -389,10 +389,10 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderWidth: 0,
-        borderColor: 'whitesmoke'
+        borderColor: 'whitesmoke',
+        marginTop: 50
     },
     textSmall: {
         fontSize: 16,

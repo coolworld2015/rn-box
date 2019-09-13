@@ -16,27 +16,52 @@ import Music from '../music/music';
 import musicDetails from '../music/musicDetails';
 
 import playTrack from './playTrack';
+import {StackViewStyleInterpolator} from "react-navigation-stack";
 
 const SearchTab = createStackNavigator({
-    Search,
-    searchMusicResults,
-    searchMusicDetails,
-    searchMoviesResults,
-    searchMoviesDetails,
-    playTrack
-});
+        Search,
+        searchMusicResults,
+        searchMusicDetails,
+        searchMoviesResults,
+        searchMoviesDetails,
+        playTrack
+    }, {
+        headerMode: 'none',
+        transitionConfig: () => ({
+            screenInterpolator: sceneProps => {
+                return StackViewStyleInterpolator.forHorizontal(sceneProps);
+            }
+        })
+    }
+);
 
 const MoviesTab = createStackNavigator({
     Movies,
     moviesDetails,
-    playTrack
-});
+        playTrack
+    }, {
+        headerMode: 'none',
+        transitionConfig: () => ({
+            screenInterpolator: sceneProps => {
+                return StackViewStyleInterpolator.forHorizontal(sceneProps);
+            }
+        })
+    }
+);
 
 const MusicTab = createStackNavigator({
     Music,
     musicDetails,
-    playTrack
-});
+        playTrack
+    }, {
+        headerMode: 'none',
+        transitionConfig: () => ({
+            screenInterpolator: sceneProps => {
+                return StackViewStyleInterpolator.forHorizontal(sceneProps);
+            }
+        })
+    }
+);
 
 const TabNavigator = createBottomTabNavigator({
         Search: SearchTab,

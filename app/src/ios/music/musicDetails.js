@@ -197,7 +197,8 @@ const styles = StyleSheet.create({
         //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderWidth: 0,
-        borderColor: 'whitesmoke'
+        borderColor: 'whitesmoke',
+        marginTop: 50
     },
     textSmall: {
         fontSize: 16,

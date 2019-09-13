@@ -284,7 +284,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: 'darkblue',
         borderWidth: 0,
-        borderColor: 'whitesmoke'
+        borderColor: 'whitesmoke',
+        marginTop: 50
     },
     textSmall: {
         fontSize: 16,
