@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
     createStackNavigator,
     createAppContainer,
@@ -76,7 +77,7 @@ const tabBarOptions = {
         fontWeight: 'bold'
     },
     upperCaseLabel: false,
-    indicatorStyle: {backgroundColor: 'darkblue'},
+    indicatorStyle: {backgroundColor: 'darkblue'}
 };
 
 const TabNavigator = createMaterialTopTabNavigator({

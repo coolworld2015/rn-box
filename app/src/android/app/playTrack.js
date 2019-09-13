@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 
 import Video from 'react-native-video';
-import Player from './video';
 
 class PlayTrack extends Component {
     constructor(props) {
@@ -28,15 +27,8 @@ class PlayTrack extends Component {
         }
     }
 
-    componentDidMount() {
-        this.setState({
-            height: Dimensions.get('window').height,
-            width: Dimensions.get('window').width
-        });
-    }
-
     goBack() {
-        this.props.navigator.pop();
+        this.props.navigation.goBack();
     }
 
     render() {
