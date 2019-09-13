@@ -36,44 +36,39 @@ class PlayTrack extends Component {
 
             <View style={styles.container}>
 
-                <Video source={{uri: this.state.url}}   // Can be a URL or a local file.
+                <Video source={{uri: this.state.url}}
                        ref={(ref: Video) => {
                            this.video = ref
                        }}
-                       style={styles.backgroundVideo}
-                />
+                       style={styles.backgroundVideo}/>
 
-              {/*  <View style={styles.header}>
+                <View style={styles.header}>
                     <View>
                         <TouchableHighlight
                             onPress={() => this.goBack()}
                             underlayColor='darkblue'>
-                            <View>
-                                <Text style={styles.textSmall}>
-                                    Back
-                                </Text>
-                            </View>
+                            <Text style={styles.textSmall}>
+                                Back
+                            </Text>
                         </TouchableHighlight>
                     </View>
-                    <View>
-                        <TouchableWithoutFeedback underlayColor='#ddd'>
-                            <View>
-                                <Text style={styles.textLarge}>
-                                    {this.state.name}
-                                </Text>
-                            </View>
-                        </TouchableWithoutFeedback>
+                    <View style={styles.itemWrap}>
+                        <TouchableHighlight
+                            underlayColor='darkblue'>
+                            <Text style={styles.textLarge}>
+                                {this.state.name}
+                            </Text>
+                        </TouchableHighlight>
                     </View>
                     <View>
                         <TouchableHighlight
                             underlayColor='darkblue'>
-                            <View>
-                                <Text style={styles.textSmall}>
-                                </Text>
-                            </View>
+                            <Text style={styles.textSmall}>
+                            </Text>
                         </TouchableHighlight>
                     </View>
-                </View>*/}
+                </View>
+
             </View>
 
         )
@@ -84,22 +79,23 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: 'black'
+        backgroundColor: 'white'
     },
     backgroundVideo: {
         position: 'absolute',
-        top: 70,
+        top: 170,
         left: 0,
         bottom: 0,
         right: 0,
     },
     header: {
-        top: -257,
+        position: 'absolute',
+        top: 0,
         flexDirection: 'row',
         justifyContent: 'space-between',
         backgroundColor: 'darkblue',
-        borderWidth: 0,
-        borderColor: 'whitesmoke'
+        borderTopWidth: 1,
+        borderColor: 'white'
     },
     textSmall: {
         fontSize: 16,
@@ -127,7 +123,9 @@ const styles = StyleSheet.create({
     itemWrap: {
         flex: 1,
         flexDirection: 'column',
-        flexWrap: 'wrap'
+        textAlign: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     itemTextBold: {
         fontSize: 18,

@@ -91,7 +91,7 @@ class MoviesDetails extends Component {
                 image = <Image
                     source={{uri: this.state.pushEvent.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg')}}
                     style={{
-                        height: 300,
+                        height: 400,
                         width: 300,
                         borderRadius: 10,
                         margin: 5
@@ -202,7 +202,6 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderTopWidth: 1,
         borderColor: 'white'
@@ -221,18 +220,13 @@ const styles = StyleSheet.create({
         marginLeft: 0,
         fontWeight: 'bold',
         color: 'white',
-        //justifyContent: 'center',
-        //alignItems: 'center',
-        //backgroundColor: 'red'
     },
     itemWrap: {
         flex: 1,
         flexDirection: 'column',
         textAlign: 'center',
-        //flexWrap: 'wrap',
         justifyContent: 'center',
         alignItems: 'center',
-        //backgroundColor: 'green'
     },
     form: {
         flex: 1,
