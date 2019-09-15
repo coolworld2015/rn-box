@@ -235,8 +235,8 @@ class Search extends Component {
                                         width: this.state.width * .94,
                                         fontSize: 18,
                                         color: 'darkblue',
-                                        paddingTop: 6,
-                                        marginLeft: -8
+                                        paddingTop: 8,
+                                        marginLeft: 5
                                     }}
                                     placeholderTextColor="darkblue"
                                     placeholder="Search here">
@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         borderRadius: 5,
-        paddingLeft: 6
+        //paddingLeft: 6
     },
     button: {
         height: 50,

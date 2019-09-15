@@ -55,6 +55,9 @@ class PlayTrack extends Component {
                        ref={(ref: Video) => {
                            this.video = ref
                        }}
+                       controls={true}
+                       fullscreen={true}
+                       resizeMode="contain"
                        style={styles.backgroundVideo}/>
 
                 <View style={styles.header}>

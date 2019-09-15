@@ -44,6 +44,8 @@ class PlayTrack extends Component {
                        ref={(ref: Video) => {
                            this.video = ref
                        }}
+                       controls={true}
+                       resizeMode="contain"
                        style={styles.backgroundVideo}/>
 
                 <View style={styles.header}>
@@ -85,10 +87,13 @@ const styles = StyleSheet.create({
     },
     backgroundVideo: {
         position: 'absolute',
-        top: 170,
+        top: 100,
         left: 0,
         bottom: 0,
         right: 0,
+        borderWidth: 1,
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height * 0.5
     },
     header: {
         position: 'absolute',
