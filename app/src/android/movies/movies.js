@@ -11,7 +11,6 @@ import {
     ActivityIndicator,
     TextInput,
     AsyncStorage,
-    Alert,
     Image,
     Dimensions,
     RefreshControl
@@ -23,7 +22,7 @@ class Movies extends Component {
     constructor(props) {
         super(props);
 
-        var ds = new ListView.DataSource({
+        let ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 !== r2
         });
 
@@ -69,7 +68,7 @@ class Movies extends Component {
             resultsCount: 0,
             recordsCount: 15,
             positionY: 0,
-            searchQuery: ''
+            searchQuery: '',
         });
 
         AsyncStorage.getItem('rn-box.movies')
@@ -80,7 +79,7 @@ class Movies extends Component {
                         dataSource: this.state.dataSource.cloneWithRows(json.sort(this.sort).slice(0, 5)),
                         resultsCount: json.length,
                         responseData: json.sort(this.sort),
-                        filteredItems: json.sort(this.sort)
+                        filteredItems: json.sort(this.sort),
                     });
                 }
             })
@@ -93,7 +92,7 @@ class Movies extends Component {
     }
 
     sort(a, b) {
-        var nameA = a.trackName.toLowerCase(), nameB = b.trackName.toLowerCase();
+        let nameA = a.trackName.toLowerCase(), nameB = b.trackName.toLowerCase();
         if (nameA < nameB) {
             return -1
         }
@@ -109,26 +108,25 @@ class Movies extends Component {
     }
 
     renderRow(rowData) {
-        var image;
+        let image;
         if (rowData) {
             if (rowData.artworkUrl100) {
                 image = <Image
                     source={{uri: rowData.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg')}}
                     style={styles.img}
-                />;
+                />
             } else {
                 image = <Image
                     source={{uri: rowData.pic}}
                     style={styles.img}
-                />;
+                />
             }
         }
 
         return (
             <TouchableHighlight
                 onPress={() => this.showDetails(rowData)}
-                underlayColor='#ddd'
-            >
+                underlayColor='#ddd'>
                 <View style={styles.imgsList}>
 
                     {image}
@@ -156,7 +154,7 @@ class Movies extends Component {
                     </View>
                 </View>
             </TouchableHighlight>
-        );
+        )
     }
 
     refreshData(event) {
@@ -183,12 +181,12 @@ class Movies extends Component {
     }
 
     onChangeText(text) {
-        if (this.state.responseData == undefined) {
+        if (this.state.responseData === undefined) {
             return;
         }
 
-        var arr = [].concat(this.state.responseData);
-        var items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) != -1);
+        let arr = [].concat(this.state.responseData);
+        let items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) !== -1);
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(items),
             resultsCount: items.length,
@@ -215,7 +213,7 @@ class Movies extends Component {
             positionY: 0,
             recordsCount: 15,
             searchQuery: ''
-        });
+        })
     }
 
     render() {
@@ -224,7 +222,7 @@ class Movies extends Component {
         if (this.state.serverError) {
             errorCtrl = <Text style={styles.error}>
                 Something went wrong.
-            </Text>;
+            </Text>
         }
 
         if (this.state.showProgress) {
@@ -234,7 +232,7 @@ class Movies extends Component {
                     color="darkblue"
                     animating={true}
                 />
-            </View>;
+            </View>
         }
 
         if (this.state.searchQuery.length > 0) {
@@ -245,7 +243,7 @@ class Movies extends Component {
                     width: 20,
                     marginTop: 10
                 }}
-            />;
+            />
         }
 
         return (
@@ -254,17 +252,14 @@ class Movies extends Component {
                     <View>
                         <TouchableHighlight
                             onPress={() => this.refreshDataAndroid()}
-                            underlayColor='#ddd'
-                        >
+                            underlayColor='#ddd'>
                             <Text style={styles.textSmall}>
-
                             </Text>
                         </TouchableHighlight>
                     </View>
                     <View>
                         <TouchableHighlight
-                            underlayColor='#ddd'
-                        >
+                            underlayColor='#ddd'>
                             <Text style={styles.textLarge}>
                                 Movies
                             </Text>
@@ -272,8 +267,7 @@ class Movies extends Component {
                     </View>
                     <View>
                         <TouchableHighlight
-                            underlayColor='#ddd'
-                        >
+                            underlayColor='#ddd'>
                             <Text style={styles.textSmall}>
                             </Text>
                         </TouchableHighlight>
@@ -308,8 +302,7 @@ class Movies extends Component {
                         width: this.state.width * .10,
                     }}>
                         <TouchableWithoutFeedback
-                            onPress={() => this.clearSearchQuery()}
-                        >
+                            onPress={() => this.clearSearchQuery()}>
                             <View>
                                 {image}
                             </View>
@@ -354,7 +347,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderColor: '#D7D7D7',
         borderBottomWidth: 1,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
     },
     iconForm: {
         flexDirection: 'row',
@@ -441,7 +434,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 10,
         borderColor: '#D7D7D7',
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         color: 'white',
         fontWeight: 'bold'

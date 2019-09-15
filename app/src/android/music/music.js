@@ -11,7 +11,6 @@ import {
     ActivityIndicator,
     TextInput,
     AsyncStorage,
-    Alert,
     Image,
     Dimensions,
     RefreshControl
@@ -69,7 +68,7 @@ class Music extends Component {
             resultsCount: 0,
             recordsCount: 15,
             positionY: 0,
-            searchQuery: ''
+            searchQuery: '',
         });
 
         AsyncStorage.getItem('rn-box.music')
@@ -80,7 +79,7 @@ class Music extends Component {
                         dataSource: this.state.dataSource.cloneWithRows(json.sort(this.sort).slice(0, 5)),
                         resultsCount: json.length,
                         responseData: json.sort(this.sort),
-                        filteredItems: json.sort(this.sort)
+                        filteredItems: json.sort(this.sort),
                     });
                 }
             })
@@ -129,7 +128,9 @@ class Music extends Component {
                 onPress={() => this.showDetails(rowData)}
                 underlayColor='#ddd'>
                 <View style={styles.imgsList}>
+
                     {image}
+
                     <View style={styles.textBlock}>
                         <Text style={styles.textItemBold}>
                             {rowData.trackName}
@@ -153,7 +154,7 @@ class Music extends Component {
                     </View>
                 </View>
             </TouchableHighlight>
-        );
+        )
     }
 
     refreshData(event) {
@@ -174,23 +175,23 @@ class Music extends Component {
             this.setState({
                 dataSource: this.state.dataSource.cloneWithRows(items),
                 recordsCount: recordsCount + 10,
-                positionY: positionY + 400
-            });
+                positionY: positionY + 400,
+            })
         }
     }
 
     onChangeText(text) {
-        if (this.state.responseData == undefined) {
+        if (this.state.responseData === undefined) {
             return;
         }
 
         let arr = [].concat(this.state.responseData);
-        let items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) != -1);
+        let items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) !== -1);
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(items),
             resultsCount: items.length,
             filteredItems: items,
-            searchQuery: text
+            searchQuery: text,
         })
     }
 
@@ -221,7 +222,7 @@ class Music extends Component {
         if (this.state.serverError) {
             errorCtrl = <Text style={styles.error}>
                 Something went wrong.
-            </Text>;
+            </Text>
         }
 
         if (this.state.showProgress) {
@@ -231,7 +232,7 @@ class Music extends Component {
                     color="darkblue"
                     animating={true}
                 />
-            </View>;
+            </View>
         }
 
         if (this.state.searchQuery.length > 0) {
@@ -242,7 +243,7 @@ class Music extends Component {
                     width: 20,
                     marginTop: 10
                 }}
-            />;
+            />
         }
 
         return (
@@ -251,17 +252,14 @@ class Music extends Component {
                     <View>
                         <TouchableHighlight
                             onPress={() => this.refreshDataAndroid()}
-                            underlayColor='#ddd'
-                        >
+                            underlayColor='#ddd'>
                             <Text style={styles.textSmall}>
-
                             </Text>
                         </TouchableHighlight>
                     </View>
                     <View>
                         <TouchableHighlight
-                            underlayColor='#ddd'
-                        >
+                            underlayColor='#ddd'>
                             <Text style={styles.textLarge}>
                                 Music
                             </Text>
@@ -269,8 +267,7 @@ class Music extends Component {
                     </View>
                     <View>
                         <TouchableHighlight
-                            underlayColor='#ddd'
-                        >
+                            underlayColor='#ddd'>
                             <Text style={styles.textSmall}>
                             </Text>
                         </TouchableHighlight>
@@ -305,8 +302,7 @@ class Music extends Component {
                         width: this.state.width * .10,
                     }}>
                         <TouchableWithoutFeedback
-                            onPress={() => this.clearSearchQuery()}
-                        >
+                            onPress={() => this.clearSearchQuery()}>
                             <View>
                                 {image}
                             </View>
@@ -325,8 +321,7 @@ class Music extends Component {
                                     refreshing={this.state.refreshing}
                                     onRefresh={this.refreshDataAndroid.bind(this)}
                                 />
-                            }
-                >
+                            }>
                     <ListView
                         enableEmptySections={true}
                         dataSource={this.state.dataSource}
@@ -391,7 +386,6 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderTopWidth: 1,
         borderColor: 'white'
@@ -439,7 +433,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 10,
         borderColor: '#D7D7D7',
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         color: 'white',
         fontWeight: 'bold'

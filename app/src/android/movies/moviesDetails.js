@@ -10,7 +10,7 @@ import {
     ScrollView,
     AsyncStorage,
     Alert,
-    BackHandler,
+    BackHandler
 } from 'react-native';
 
 class MoviesDetails extends Component {
@@ -81,7 +81,7 @@ class MoviesDetails extends Component {
     }
 
     goBack() {
-        this.props.navigation.goBack();
+        this.props.navigation.goBack()
     }
 
     render() {
@@ -97,7 +97,7 @@ class MoviesDetails extends Component {
                         borderRadius: 10,
                         margin: 5
                     }}
-                />;
+                />
             } else {
                 image = <Image
                     source={{uri: this.state.pushEvent.pic}}
@@ -107,7 +107,7 @@ class MoviesDetails extends Component {
                         borderRadius: 10,
                         margin: 5
                     }}
-                />;
+                />
             }
         }
 
@@ -151,7 +151,9 @@ class MoviesDetails extends Component {
                             <TouchableHighlight
                                 onPress={() => this.playTrack()}
                                 underlayColor='darkblue'>
+
                                 {image}
+
                             </TouchableHighlight>
                         </View>
 
@@ -190,7 +192,7 @@ class MoviesDetails extends Component {
                     </View>
                 </ScrollView>
             </View>
-        );
+        )
     }
 }
 
@@ -267,7 +269,6 @@ const styles = StyleSheet.create({
     },
     button: {
         height: 50,
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderColor: '#48BBEC',
         alignSelf: 'stretch',

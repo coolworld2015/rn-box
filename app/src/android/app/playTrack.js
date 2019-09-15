@@ -6,9 +6,8 @@ import {
     Text,
     View,
     TouchableHighlight,
-    TouchableWithoutFeedback,
-    ScrollView,
-    Dimensions
+    Dimensions,
+    BackHandler
 } from 'react-native';
 
 import Video from 'react-native-video';
@@ -16,6 +15,13 @@ import Video from 'react-native-video';
 class PlayTrack extends Component {
     constructor(props) {
         super(props);
+
+        BackHandler.addEventListener('hardwareBackPress', () => {
+            if (this.props.navigation) {
+                this.props.navigation.goBack();
+            }
+            return true;
+        });
 
         this.state = {
             height: Dimensions.get('window').height,
@@ -147,7 +153,6 @@ const styles = StyleSheet.create({
     },
     button: {
         height: 50,
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderColor: '#48BBEC',
         alignSelf: 'stretch',

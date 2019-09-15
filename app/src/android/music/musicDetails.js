@@ -7,23 +7,22 @@ import {
     View,
     Image,
     TouchableHighlight,
-    ListView,
     ScrollView,
-    ActivityIndicator,
     AsyncStorage,
     Alert,
+    BackHandler
 } from 'react-native';
 
 class MusicDetails extends Component {
     constructor(props) {
         super(props);
 
-        /*		BackAndroid.addEventListener('hardwareBackPress', () => {
-                    if (this.props.navigator) {
-                        this.props.navigator.pop();
-                    }
-                    return true;
-                });	*/
+        BackHandler.addEventListener('hardwareBackPress', () => {
+            if (this.props.navigation) {
+                this.props.navigation.goBack();
+            }
+            return true;
+        });
 
         this.state = {
             pushEvent: appConfig.item
@@ -68,7 +67,6 @@ class MusicDetails extends Component {
                             this.props.navigation.navigate('Music', {refresh: true})
                         }
                     );
-
             })
             .catch(error => console.log(error))
     }
@@ -96,9 +94,9 @@ class MusicDetails extends Component {
                         height: 300,
                         width: 300,
                         borderRadius: 10,
-                        margin: 5
+                        margin: 5,
                     }}
-                />;
+                />
             } else {
                 image = <Image
                     source={{uri: this.state.pushEvent.pic}}
@@ -108,7 +106,7 @@ class MusicDetails extends Component {
                         borderRadius: 10,
                         margin: 5
                     }}
-                />;
+                />
             }
         }
 
@@ -118,8 +116,7 @@ class MusicDetails extends Component {
                     <View>
                         <TouchableHighlight
                             onPress={() => this.goBack()}
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textSmall}>
                                 Back
                             </Text>
@@ -127,8 +124,7 @@ class MusicDetails extends Component {
                     </View>
                     <View style={styles.itemWrap}>
                         <TouchableHighlight
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textLarge}>
                                 {this.state.pushEvent.trackName}
                             </Text>
@@ -137,8 +133,7 @@ class MusicDetails extends Component {
                     <View>
                         <TouchableHighlight
                             onPress={() => this.deleteMovieDialog()}
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textSmall}>
                                 Delete
                             </Text>
@@ -157,9 +152,10 @@ class MusicDetails extends Component {
                         <View style={{alignItems: 'center'}}>
                             <TouchableHighlight
                                 onPress={() => this.playTrack()}
-                                underlayColor='darkblue'
-                            >
+                                underlayColor='darkblue'>
+
                                 {image}
+
                             </TouchableHighlight>
                         </View>
 
@@ -194,7 +190,7 @@ class MusicDetails extends Component {
                     </View>
                 </ScrollView>
             </View>
-        );
+        )
     }
 }
 
@@ -207,7 +203,6 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderTopWidth: 1,
         borderColor: 'white'
@@ -237,7 +232,6 @@ const styles = StyleSheet.create({
     itemWrap: {
         flex: 1,
         flexDirection: 'column',
-        //flexWrap: 'wrap'
     },
     itemTextBold: {
         fontSize: 18,
@@ -263,7 +257,6 @@ const styles = StyleSheet.create({
     },
     button: {
         height: 50,
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderColor: '#48BBEC',
         alignSelf: 'stretch',
