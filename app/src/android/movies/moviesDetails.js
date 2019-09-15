@@ -62,7 +62,7 @@ class MoviesDetails extends Component {
                 }
 
                 AsyncStorage.setItem('rn-box.movies', JSON.stringify(movies))
-                    .then(json => {
+                    .then(() => {
                             appConfig.movies.refresh = true;
                             this.props.navigation.navigate('Movies', {refresh: true})
                         }

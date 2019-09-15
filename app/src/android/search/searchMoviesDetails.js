@@ -29,7 +29,7 @@ class SearchMoviesDetails extends Component {
     }
 
     localStorageInsert() {
-        var movies = [];
+        let movies = [];
 
         AsyncStorage.getItem('rn-box.movies')
             .then(req => JSON.parse(req))
@@ -41,8 +41,8 @@ class SearchMoviesDetails extends Component {
                     movies.shift()
                 }
 
-                AsyncStorage.setItem('rn-box.movies', JSON.stringify(movies))
-                    .then(json => {
+                AsyncStorage.setItem('rn-box.movies', JSON.stringify(movies),)
+                    .then(() => {
                             appConfig.movies.refresh = true;
                             this.props.navigation.goBack()
                         }
@@ -64,7 +64,7 @@ class SearchMoviesDetails extends Component {
     }
 
     render() {
-        var image = <View/>;
+        let image = <View/>;
 
         if (this.state.pushEvent) {
             if (this.state.pushEvent.artworkUrl100) {
@@ -74,9 +74,9 @@ class SearchMoviesDetails extends Component {
                         height: 300,
                         width: 300,
                         borderRadius: 10,
-                        margin: 5
+                        margin: 5,
                     }}
-                />;
+                />
             } else {
                 image = <Image
                     source={{uri: this.state.pushEvent.pic}}
@@ -86,7 +86,7 @@ class SearchMoviesDetails extends Component {
                         borderRadius: 20,
                         margin: 20
                     }}
-                />;
+                />
             }
         }
 
@@ -96,8 +96,7 @@ class SearchMoviesDetails extends Component {
                     <View>
                         <TouchableHighlight
                             onPress={() => this.goBack()}
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textSmall}>
                                 Back
                             </Text>
@@ -105,8 +104,7 @@ class SearchMoviesDetails extends Component {
                     </View>
                     <View style={styles.itemWrap}>
                         <TouchableHighlight
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textLarge}>
                                 {this.state.pushEvent.trackName}
                             </Text>
@@ -115,8 +113,7 @@ class SearchMoviesDetails extends Component {
                     <View>
                         <TouchableHighlight
                             onPress={() => this.localStorageInsert()}
-                            underlayColor='darkblue'
-                        >
+                            underlayColor='darkblue'>
                             <Text style={styles.textSmall}>
                                 Add
                             </Text>
@@ -130,14 +127,15 @@ class SearchMoviesDetails extends Component {
                         padding: 10,
                         paddingBottom: 55,
                         justifyContent: 'flex-start',
-                        backgroundColor: 'white'
+                        backgroundColor: 'white',
                     }}>
                         <View style={{alignItems: 'center'}}>
                             <TouchableHighlight
                                 onPress={() => this.playTrack()}
-                                underlayColor='darkblue'
-                            >
+                                underlayColor='darkblue'>
+
                                 {image}
+
                             </TouchableHighlight>
                         </View>
 
@@ -176,7 +174,7 @@ class SearchMoviesDetails extends Component {
                     </View>
                 </ScrollView>
             </View>
-        );
+        )
     }
 }
 
@@ -184,12 +182,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderWidth: 0,
         borderColor: 'whitesmoke'
@@ -219,7 +216,6 @@ const styles = StyleSheet.create({
     itemWrap: {
         flex: 1,
         flexDirection: 'column',
-        //flexWrap: 'wrap'
     },
     itemTextBold: {
         fontSize: 18,
@@ -252,7 +248,6 @@ const styles = StyleSheet.create({
     },
     button: {
         height: 50,
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderColor: '#48BBEC',
         alignSelf: 'stretch',
