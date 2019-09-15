@@ -88,10 +88,8 @@ class SearchMoviesResults extends Component {
     }
 
     pressRow(rowData) {
-        this.props.navigator.push({
-            index: 22,
-            data: rowData
-        });
+        appConfig.item = rowData;
+        this.props.navigation.navigate('searchMoviesDetails');
     }
 
     renderRow(rowData) {

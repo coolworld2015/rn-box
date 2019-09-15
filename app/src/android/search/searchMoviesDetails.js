@@ -7,36 +7,24 @@ import {
     View,
     Image,
     TouchableHighlight,
-    ListView,
     ScrollView,
-    ActivityIndicator,
-    TextInput,
     AsyncStorage,
-    Alert
+    BackHandler
 } from 'react-native';
 
 class SearchMoviesDetails extends Component {
     constructor(props) {
         super(props);
 
-        /*		BackAndroid.addEventListener('hardwareBackPress', () => {
-                    if (this.props.navigator) {
-                        this.props.navigator.pop();
-                    }
-                    return true;
-                });	*/
+        BackHandler.addEventListener('hardwareBackPress', () => {
+            if (this.props.navigation) {
+                this.props.navigation.goBack();
+            }
+            return true;
+        });
 
         this.state = {
-            pushEvent: {
-                trackName: '',
-                releaseDate: ' - '
-            }
-        };
-
-        if (props.data) {
-            this.state = {
-                pushEvent: props.data
-            };
+            pushEvent: appConfig.item
         }
     }
 
@@ -51,27 +39,24 @@ class SearchMoviesDetails extends Component {
 
                 if (movies[0] == null) {
                     movies.shift()
-                } // Hack !!!
+                }
 
                 AsyncStorage.setItem('rn-box.movies', JSON.stringify(movies))
                     .then(json => {
                             appConfig.movies.refresh = true;
-                            this.props.navigator.pop();
+                            this.props.navigation.goBack()
                         }
-                    );
-
+                    )
             })
             .catch(error => console.log(error));
     }
 
     playTrack() {
-        this.props.navigator.push({
-            index: 3,
-            data: {
-                name: this.state.pushEvent.trackName,
-                url: this.state.pushEvent.previewUrl
-            }
-        });
+        appConfig.item = {
+            name: this.state.pushEvent.trackName,
+            url: this.state.pushEvent.previewUrl
+        };
+        this.props.navigation.navigate('playTrack');
     }
 
     goBack() {

@@ -10,18 +10,19 @@ import {
     ScrollView,
     AsyncStorage,
     Alert,
+    BackHandler,
 } from 'react-native';
 
 class MoviesDetails extends Component {
     constructor(props) {
         super(props);
 
-        /*		BackAndroid.addEventListener('hardwareBackPress', () => {
-                    if (this.props.navigator) {
-                        this.props.navigator.pop();
-                    }
-                    return true;
-                });	*/
+        BackHandler.addEventListener('hardwareBackPress', () => {
+            if (this.props.navigation) {
+                this.props.navigation.goBack();
+            }
+            return true;
+        });
 
         this.state = {
             pushEvent: appConfig.item

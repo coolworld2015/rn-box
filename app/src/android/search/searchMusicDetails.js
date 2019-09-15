@@ -12,31 +12,22 @@ import {
     ActivityIndicator,
     TextInput,
     AsyncStorage,
-    Alert,
+    Alert, BackHandler,
 } from 'react-native';
 
 class SearchMusicDetails extends Component {
     constructor(props) {
         super(props);
 
-        /*		BackAndroid.addEventListener('hardwareBackPress', () => {
-                    if (this.props.navigator) {
-                        this.props.navigator.pop();
-                    }
-                    return true;
-                });	*/
+        BackHandler.addEventListener('hardwareBackPress', () => {
+            if (this.props.navigation) {
+                this.props.navigation.goBack();
+            }
+            return true;
+        });
 
         this.state = {
-            pushEvent: {
-                trackName: '',
-                releaseDate: ' - '
-            }
-        };
-
-        if (props.data) {
-            this.state = {
-                pushEvent: props.data
-            };
+            pushEvent: appConfig.item
         }
     }
 
@@ -51,12 +42,12 @@ class SearchMusicDetails extends Component {
 
                 if (music[0] == null) {
                     music.shift()
-                } // Hack !!!
+                }
 
                 AsyncStorage.setItem('rn-box.music', JSON.stringify(music))
                     .then(json => {
                             appConfig.music.refresh = true;
-                            this.props.navigator.pop();
+                            this.props.navigation.goBack()
                         }
                     );
 
@@ -65,13 +56,11 @@ class SearchMusicDetails extends Component {
     }
 
     playTrack() {
-        this.props.navigator.push({
-            index: 3,
-            data: {
-                name: this.state.pushEvent.trackName,
-                url: this.state.pushEvent.previewUrl
-            }
-        });
+        appConfig.item = {
+            name: this.state.pushEvent.trackName,
+            url: this.state.pushEvent.previewUrl
+        };
+        this.props.navigation.navigate('playTrack');
     }
 
     goBack() {
