@@ -204,8 +204,8 @@ class SearchMoviesResults extends Component {
         });
     }
 
-    goBack(rowData) {
-        this.props.navigator.pop();
+    goBack() {
+        this.props.navigation.goBack();
     }
 
     render() {

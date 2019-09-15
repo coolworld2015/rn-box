@@ -22,19 +22,13 @@ class Search extends Component {
             eventSwitchTitle: true,
             eventSwitchBase: false,
             eventSwitchBaseMovies: true,
-            eventSwitchBaseType: false,
-            textSwitchBase: 'Search music',
+            eventSwitchBaseType: true,
+            textSwitchBase: 'Search clips',
             textSwitchBaseMovies: 'Search movies',
-            textSwitchBaseType: 'Music',
+            textSwitchBaseType: 'Movies',
             bugANDROID: '',
             width: Dimensions.get('window').width
         }
-    }
-
-    componentDidMount() {
-        this.setState({
-            width: Dimensions.get('window').width
-        });
     }
 
     clearSearch() {

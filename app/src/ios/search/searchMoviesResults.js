@@ -37,7 +37,6 @@ class SearchMoviesResults extends Component {
             width: Dimensions.get('window').width
         };
         this.getItems();
-
     }
 
     getItems() {
@@ -117,7 +116,7 @@ class SearchMoviesResults extends Component {
                     </View>
                 </View>
             </TouchableHighlight>
-        );
+        )
     }
 
     refreshData(event) {

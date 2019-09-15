@@ -35,23 +35,15 @@ class SearchMusicResults extends Component {
         this.state = {
             dataSource: ds.cloneWithRows([]),
             searchQuery: '',
+            searchType: appConfig.item.searchType,
+            searchQueryHttp: appConfig.item.searchQuery,
+            showProgress: true,
+            resultsCount: 0,
+            recordsCount: 15,
+            positionY: 0,
+            refreshing: false,
             width: Dimensions.get('window').width
         };
-
-        if (props.data) {
-            this.state = {
-                dataSource: ds.cloneWithRows([]),
-                searchType: props.data.searchType,
-                searchQueryHttp: props.data.searchQuery,
-                showProgress: true,
-                resultsCount: 0,
-                recordsCount: 15,
-                positionY: 0,
-                searchQuery: '',
-                refreshing: false
-            }
-        }
-
         this.getItems();
     }
 
@@ -95,18 +87,15 @@ class SearchMusicResults extends Component {
     }
 
     pressRow(rowData) {
-        this.props.navigator.push({
-            index: 11,
-            data: rowData
-        });
+        appConfig.item = rowData;
+        this.props.navigation.navigate('searchMusicDetails');
     }
 
     renderRow(rowData) {
         return (
             <TouchableHighlight
                 onPress={() => this.pressRow(rowData)}
-                underlayColor='#ddd'
-            >
+                underlayColor='#ddd'>
                 <View style={styles.imgsList}>
                     <Image
                         source={{uri: rowData.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg')}}
@@ -135,7 +124,7 @@ class SearchMusicResults extends Component {
                     </View>
                 </View>
             </TouchableHighlight>
-        );
+        )
     }
 
     refreshData(event) {
@@ -196,8 +185,8 @@ class SearchMusicResults extends Component {
         });
     }
 
-    goBack(rowData) {
-        this.props.navigator.pop();
+    goBack() {
+        this.props.navigation.goBack();
     }
 
     render() {
