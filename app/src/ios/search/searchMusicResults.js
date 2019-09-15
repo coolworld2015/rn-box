@@ -21,7 +21,7 @@ class SearchMusicResults extends Component {
         super(props);
 
         let ds = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 != r2
+            rowHasChanged: (r1, r2) => r1 !== r2
         });
 
         this.state = {
@@ -46,7 +46,7 @@ class SearchMusicResults extends Component {
             resultsCount: 0,
             recordsCount: 15,
             positionY: 0,
-            searchQuery: ''
+            searchQuery: '',
         });
 
         fetch('https://itunes.apple.com/search?media='
@@ -56,7 +56,7 @@ class SearchMusicResults extends Component {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
-            }
+            },
         })
             .then((response) => response.json())
             .then((responseData) => {
@@ -130,7 +130,7 @@ class SearchMusicResults extends Component {
                 resultsCount: 0,
                 recordsCount: 25,
                 positionY: 0,
-                searchQuery: ''
+                searchQuery: '',
             });
 
             setTimeout(() => {
@@ -151,7 +151,7 @@ class SearchMusicResults extends Component {
             this.setState({
                 dataSource: this.state.dataSource.cloneWithRows(items),
                 recordsCount: recordsCount + 10,
-                positionY: positionY + 500
+                positionY: positionY + 500,
             })
         }
     }
@@ -256,7 +256,7 @@ class SearchMusicResults extends Component {
                                 borderWidth: 3,
                                 borderColor: 'white',
                                 borderRadius: 0,
-                                width: Dimensions.get('window').width * .90,
+                                width: Dimensions.get('window').width * .90
                             }}
                             value={this.state.searchQuery}
                             placeholder="Search here">

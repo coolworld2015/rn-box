@@ -11,10 +11,8 @@ import {
     ActivityIndicator,
     TextInput,
     AsyncStorage,
-    Alert,
     Image,
-    Dimensions,
-    RefreshControl
+    Dimensions
 } from 'react-native';
 
 import ListView from 'deprecated-react-native-listview';

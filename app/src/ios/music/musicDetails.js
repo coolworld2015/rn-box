@@ -55,7 +55,7 @@ class MusicDetails extends Component {
                 }
 
                 AsyncStorage.setItem('rn-box.music', JSON.stringify(music))
-                    .then(json => {
+                    .then(() => {
                             appConfig.music.refresh = true;
                             this.props.navigation.navigate('Music', {refresh: true});
                         }
@@ -97,7 +97,7 @@ class MusicDetails extends Component {
                         height: 300,
                         width: 200,
                         borderRadius: 20,
-                        margin: 20
+                        margin: 20,
                     }}
                 />
             }
@@ -140,13 +140,15 @@ class MusicDetails extends Component {
                         padding: 10,
                         paddingBottom: 55,
                         justifyContent: 'flex-start',
-                        backgroundColor: 'white'
+                        backgroundColor: 'white',
                     }}>
                         <View style={{alignItems: 'center'}}>
                             <TouchableHighlight
                                 onPress={() => this.playTrack()}
                                 underlayColor='darkblue'>
+
                                 {image}
+
                             </TouchableHighlight>
                         </View>
 
@@ -194,7 +196,6 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         borderWidth: 0,
         borderColor: 'whitesmoke',

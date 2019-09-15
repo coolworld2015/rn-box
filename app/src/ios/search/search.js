@@ -154,7 +154,7 @@ class Search extends Component {
                         onValueChange={(value) => {
                             this.toggleTypeChange();
                             this.setState({
-                                eventSwitchBase: value
+                                eventSwitchBase: value,
                             })
                         }}
                         value={this.state.eventSwitchBase}

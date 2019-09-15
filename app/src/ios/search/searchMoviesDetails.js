@@ -34,7 +34,7 @@ class SearchMoviesDetails extends Component {
                 }
 
                 AsyncStorage.setItem('rn-box.movies', JSON.stringify(movies))
-                    .then(json => {
+                    .then(() => {
                             appConfig.movies.refresh = true;
                             this.props.navigation.goBack();
                         }
@@ -76,7 +76,7 @@ class SearchMoviesDetails extends Component {
                         height: 300,
                         width: 200,
                         borderRadius: 20,
-                        margin: 20
+                        margin: 20,
                     }}
                 />
             }
@@ -125,7 +125,9 @@ class SearchMoviesDetails extends Component {
                             <TouchableHighlight
                                 onPress={() => this.playTrack()}
                                 underlayColor='darkblue'>
+
                                 {image}
+
                             </TouchableHighlight>
                         </View>
 

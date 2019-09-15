@@ -6,8 +6,6 @@ import {
     Text,
     View,
     TouchableHighlight,
-    TouchableWithoutFeedback,
-    ScrollView,
     Dimensions
 } from 'react-native';
 

@@ -194,12 +194,12 @@ class Music extends Component {
     }
 
     onChangeText(text) {
-        if (this.state.responseData == undefined) {
+        if (this.state.responseData === undefined) {
             return;
         }
 
-        var arr = [].concat(this.state.responseData);
-        var items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) != -1);
+        let arr = [].concat(this.state.responseData);
+        let items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) !== -1);
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(items),
             resultsCount: items.length,
@@ -225,7 +225,7 @@ class Music extends Component {
         if (this.state.serverError) {
             errorCtrl = <Text style={styles.error}>
                 Something went wrong.
-            </Text>;
+            </Text>
         }
 
         if (this.state.showProgress) {
@@ -235,7 +235,7 @@ class Music extends Component {
                     color="darkblue"
                     animating={true}
                 />
-            </View>;
+            </View>
         }
 
         if (this.state.searchQuery.length > 0) {
@@ -246,7 +246,7 @@ class Music extends Component {
                     width: 20,
                     marginTop: 10
                 }}
-            />;
+            />
         }
 
         return (
@@ -255,8 +255,7 @@ class Music extends Component {
                     <View>
                         <TouchableHighlight
                             onPress={() => this.refreshDataAndroid()}
-                            underlayColor='#ddd'
-                        >
+                            underlayColor='#ddd'>
                             <Text style={styles.textSmall}>
 
                             </Text>
@@ -264,8 +263,7 @@ class Music extends Component {
                     </View>
                     <View>
                         <TouchableHighlight
-                            underlayColor='#ddd'
-                        >
+                            underlayColor='#ddd'>
                             <Text style={styles.textLarge}>
                                 Music
                             </Text>
@@ -273,8 +271,7 @@ class Music extends Component {
                     </View>
                     <View>
                         <TouchableHighlight
-                            underlayColor='#ddd'
-                        >
+                            underlayColor='#ddd'>
                             <Text style={styles.textSmall}>
                             </Text>
                         </TouchableHighlight>
@@ -293,7 +290,7 @@ class Music extends Component {
                                 borderWidth: 3,
                                 borderColor: 'white',
                                 borderRadius: 0,
-                                width: this.state.width * .90,
+                                width: this.state.width * .90
                             }}
                             value={this.state.searchQuery}
                             placeholder="Search here">
@@ -309,8 +306,7 @@ class Music extends Component {
                         width: this.state.width * .10,
                     }}>
                         <TouchableWithoutFeedback
-                            onPress={() => this.clearSearchQuery()}
-                        >
+                            onPress={() => this.clearSearchQuery()}>
                             <View>
                                 {image}
                             </View>
@@ -437,7 +433,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 10,
         borderColor: '#D7D7D7',
-        //backgroundColor: '#48BBEC',
         backgroundColor: 'darkblue',
         color: 'white',
         fontWeight: 'bold'

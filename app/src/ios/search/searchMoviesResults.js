@@ -210,7 +210,7 @@ class SearchMoviesResults extends Component {
                 style={{
                     height: 20,
                     width: 20,
-                    marginTop: 10
+                    marginTop: 10,
                 }}
             />
         }
