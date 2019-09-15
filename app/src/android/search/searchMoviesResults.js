@@ -10,11 +10,10 @@ import {
     ScrollView,
     ActivityIndicator,
     TextInput,
-    AsyncStorage,
-    Alert,
     Image,
     Dimensions,
     RefreshControl,
+    BackHandler
 } from 'react-native';
 
 import ListView from 'deprecated-react-native-listview';
@@ -23,43 +22,29 @@ class SearchMoviesResults extends Component {
     constructor(props) {
         super(props);
 
-        /*        BackAndroid.addEventListener('hardwareBackPress', () => {
-                    if (this.props.navigator) {
-                        this.props.navigator.pop();
-                    }
-                    return true;
-                });*/
+        BackHandler.addEventListener('hardwareBackPress', () => {
+            if (this.props.navigation) {
+                this.props.navigation.goBack();
+            }
+            return true;
+        });
 
-        var ds = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 != r2
+        let ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
         });
 
         this.state = {
             dataSource: ds.cloneWithRows([]),
             searchQuery: '',
+            searchType: appConfig.item.searchType,
+            searchQueryHttp: appConfig.item.searchQuery,
+            showProgress: true,
+            resultsCount: 0,
+            recordsCount: 15,
+            positionY: 0,
+            refreshing: false,
             width: Dimensions.get('window').width
-        }
-
-        if (props.data) {
-            this.state = {
-                dataSource: ds.cloneWithRows([]),
-                searchType: props.data.searchType,
-                searchQueryHttp: props.data.searchQuery,
-                showProgress: true,
-                resultsCount: 0,
-                recordsCount: 15,
-                positionY: 0,
-                searchQuery: '',
-                refreshing: false
-            }
-        }
-        ;
-    }
-
-    componentDidMount() {
-        this.setState({
-            width: Dimensions.get('window').width
-        });
+        };
         this.getItems();
     }
 
