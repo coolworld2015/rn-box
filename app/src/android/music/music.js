@@ -23,8 +23,8 @@ class Music extends Component {
     constructor(props) {
         super(props);
 
-        var ds = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 != r2
+        let ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
         });
 
         this.state = {
@@ -37,16 +37,19 @@ class Music extends Component {
             refreshing: false,
             width: Dimensions.get('window').width
         };
-    }
-
-    componentDidMount() {
-        this.setState({
-            width: Dimensions.get('window').width
-        });
         this.getItems();
     }
 
-    componentWillUpdate() {
+    componentDidMount() {
+        this.didFocusListener = this.props.navigation.addListener(
+            'didFocus',
+            () => {
+                this.refreshComponent()
+            }
+        )
+    }
+
+    refreshComponent() {
         if (appConfig.music.refresh) {
             appConfig.music.refresh = false;
 
@@ -56,7 +59,7 @@ class Music extends Component {
 
             setTimeout(() => {
                 this.getItems()
-            }, 1000);
+            }, 500);
         }
     }
 
@@ -90,7 +93,7 @@ class Music extends Component {
     }
 
     sort(a, b) {
-        var nameA = a.trackName.toLowerCase(), nameB = b.trackName.toLowerCase();
+        let nameA = a.trackName.toLowerCase(), nameB = b.trackName.toLowerCase();
         if (nameA < nameB) {
             return -1
         }
@@ -101,37 +104,32 @@ class Music extends Component {
     }
 
     showDetails(rowData) {
-        this.props.navigator.push({
-            index: 1,
-            data: rowData
-        });
+        appConfig.item = rowData;
+        this.props.navigation.navigate('musicDetails');
     }
 
     renderRow(rowData) {
-        var image;
+        let image;
         if (rowData) {
             if (rowData.artworkUrl100) {
                 image = <Image
                     source={{uri: rowData.artworkUrl100.replace('100x100bb.jpg', '500x500bb.jpg')}}
                     style={styles.img}
-                />;
+                />
             } else {
                 image = <Image
                     source={{uri: rowData.pic}}
                     style={styles.img}
-                />;
+                />
             }
         }
 
         return (
             <TouchableHighlight
                 onPress={() => this.showDetails(rowData)}
-                underlayColor='#ddd'
-            >
+                underlayColor='#ddd'>
                 <View style={styles.imgsList}>
-
                     {image}
-
                     <View style={styles.textBlock}>
                         <Text style={styles.textItemBold}>
                             {rowData.trackName}
@@ -186,8 +184,8 @@ class Music extends Component {
             return;
         }
 
-        var arr = [].concat(this.state.responseData);
-        var items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) != -1);
+        let arr = [].concat(this.state.responseData);
+        let items = arr.filter((el) => el.trackName.toLowerCase().indexOf(text.toLowerCase()) != -1);
         this.setState({
             dataSource: this.state.dataSource.cloneWithRows(items),
             resultsCount: items.length,

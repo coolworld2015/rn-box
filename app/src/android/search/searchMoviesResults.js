@@ -190,7 +190,7 @@ class SearchMoviesResults extends Component {
 
         setTimeout(() => {
             this.getItems()
-        }, 1000);
+        }, 500);
     }
 
     clearSearchQuery() {

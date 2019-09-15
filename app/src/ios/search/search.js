@@ -112,10 +112,6 @@ class Search extends Component {
         }
     }
 
-    goBack() {
-        this.props.navigator.pop();
-    }
-
     render() {
         let validCtrl, showBlock;
 
@@ -173,7 +169,6 @@ class Search extends Component {
                     <View style={styles.header}>
                         <View>
                             <TouchableHighlight
-                                onPress={() => this.goBack()}
                                 underlayColor='darkblue'>
                                 <View>
                                     <Text style={styles.textSmall}>

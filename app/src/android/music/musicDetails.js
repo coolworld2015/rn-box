@@ -26,16 +26,7 @@ class MusicDetails extends Component {
                 });	*/
 
         this.state = {
-            pushEvent: {
-                trackName: '',
-                releaseDate: ' - '
-            }
-        };
-
-        if (props.data) {
-            this.state = {
-                pushEvent: props.data
-            };
+            pushEvent: appConfig.item
         }
     }
 
@@ -54,9 +45,9 @@ class MusicDetails extends Component {
         );
     }
 
-    deleteMovie(id) {
-        var id = this.state.pushEvent.trackId;
-        var music = [];
+    deleteMovie() {
+        let id = this.state.pushEvent.trackId;
+        let music = [];
 
         AsyncStorage.getItem('rn-box.music')
             .then(req => JSON.parse(req))
@@ -64,8 +55,8 @@ class MusicDetails extends Component {
 
                 music = [].concat(json);
 
-                for (var i = 0; i < music.length; i++) {
-                    if (music[i].trackId == id) {
+                for (let i = 0; i < music.length; i++) {
+                    if (music[i].trackId === id) {
                         music.splice(i, 1);
                         break;
                     }
@@ -74,7 +65,7 @@ class MusicDetails extends Component {
                 AsyncStorage.setItem('rn-box.music', JSON.stringify(music))
                     .then(json => {
                             appConfig.music.refresh = true;
-                            this.props.navigator.pop();
+                            this.props.navigation.navigate('Music', {refresh: true})
                         }
                     );
 
@@ -83,21 +74,19 @@ class MusicDetails extends Component {
     }
 
     playTrack() {
-        this.props.navigator.push({
-            index: 2,
-            data: {
-                name: this.state.pushEvent.trackName,
-                url: this.state.pushEvent.previewUrl
-            }
-        });
+        appConfig.item = {
+            name: this.state.pushEvent.trackName,
+            url: this.state.pushEvent.previewUrl
+        };
+        this.props.navigation.navigate('playTrack');
     }
 
     goBack() {
-        this.props.navigator.pop();
+        this.props.navigation.goBack();
     }
 
     render() {
-        var image = <View/>;
+        let image = <View/>;
 
         if (this.state.pushEvent) {
             if (this.state.pushEvent.artworkUrl100) {

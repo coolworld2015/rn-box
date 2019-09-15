@@ -136,7 +136,7 @@ class SearchMoviesResults extends Component {
 
             setTimeout(() => {
                 this.getItems();
-            }, 300);
+            }, 500);
         }
 
         if (this.state.filteredItems === undefined) {

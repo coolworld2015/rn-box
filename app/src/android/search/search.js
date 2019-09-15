@@ -55,40 +55,30 @@ class Search extends Component {
 
         if (this.state.textSwitchBaseType === 'Music') {
             if (this.state.textSwitchBase === 'Search clips') {
-                this.props.navigator.push({
-                    index: 1,
-                    data: {
-                        searchQuery: this.state.searchQuery,
-                        searchType: 'musicVideo'
-                    }
-                })
+                appConfig.item = {
+                    searchQuery: this.state.searchQuery,
+                    searchType: 'musicVideo'
+                }
             } else {
-                this.props.navigator.push({
-                    index: 1,
-                    data: {
-                        searchQuery: this.state.searchQuery,
-                        searchType: 'music'
-                    }
-                })
+                appConfig.item = {
+                    searchQuery: this.state.searchQuery,
+                    searchType: 'music'
+                }
             }
+            this.props.navigation.navigate('searchMusicResults');
         } else {
             if (this.state.textSwitchBaseMovies === 'Search movies') {
-                this.props.navigator.push({
-                    index: 2,
-                    data: {
-                        searchQuery: this.state.searchQuery,
-                        searchType: 'movie'
-                    }
-                })
+                appConfig.item = {
+                    searchQuery: this.state.searchQuery,
+                    searchType: 'movie'
+                }
             } else {
-                this.props.navigator.push({
-                    index: 2,
-                    data: {
-                        searchQuery: this.state.searchQuery,
-                        searchType: 'tvShow'
-                    }
-                })
+                appConfig.item = {
+                    searchQuery: this.state.searchQuery,
+                    searchType: 'tvShow'
+                }
             }
+            this.props.navigation.navigate('searchMoviesResults');
         }
     }
 
@@ -126,10 +116,6 @@ class Search extends Component {
                 textSwitchBaseMovies: 'Search TV Series'
             });
         }
-    }
-
-    goBack() {
-        this.props.navigator.pop();
     }
 
     render() {
@@ -189,9 +175,7 @@ class Search extends Component {
                     <View style={styles.header}>
                         <View>
                             <TouchableHighlight
-                                onPress={() => this.goBack()}
-                                underlayColor='darkblue'
-                            >
+                                underlayColor='darkblue'>
                                 <View>
                                     <Text style={styles.textSmall}>
                                     </Text>
@@ -210,8 +194,7 @@ class Search extends Component {
                         <View>
                             <TouchableHighlight
                                 onPress={() => this.clearSearch()}
-                                underlayColor='darkblue'
-                            >
+                                underlayColor='darkblue'>
                                 <View>
                                     <Text style={styles.textSmall}>
                                         Clear

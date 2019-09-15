@@ -24,7 +24,7 @@ class Movies extends Component {
         super(props);
 
         var ds = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 != r2
+            rowHasChanged: (r1, r2) => r1 !== r2
         });
 
         this.state = {
@@ -41,14 +41,15 @@ class Movies extends Component {
     }
 
     componentDidMount() {
-        //console.log(this.props.navigator.addListenerOn)
-        /*this.didFocusListener = this.props.navigator.addListenerOn(
+        this.didFocusListener = this.props.navigation.addListener(
             'didFocus',
-            () => { this.ComponentUpdate(); console.log('did focus') },
-        ).bind(this);*/
+            () => {
+                this.refreshComponent()
+            }
+        )
     }
 
-    ComponentUpdate() {
+    refreshComponent() {
         if (appConfig.movies.refresh) {
             appConfig.movies.refresh = false;
 
@@ -58,7 +59,7 @@ class Movies extends Component {
 
             setTimeout(() => {
                 this.getItems()
-            }, 1000);
+            }, 500);
         }
     }
 
@@ -203,7 +204,7 @@ class Movies extends Component {
 
         setTimeout(() => {
             this.getItems()
-        }, 1000);
+        }, 500);
     }
 
     clearSearchQuery() {

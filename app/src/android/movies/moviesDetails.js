@@ -43,9 +43,9 @@ class MoviesDetails extends Component {
         );
     }
 
-    deleteMovie(id) {
-        var id = this.state.pushEvent.trackId;
-        var movies = [];
+    deleteMovie() {
+        let id = this.state.pushEvent.trackId;
+        let movies = [];
 
         AsyncStorage.getItem('rn-box.movies')
             .then(req => JSON.parse(req))
@@ -53,8 +53,8 @@ class MoviesDetails extends Component {
 
                 movies = [].concat(json);
 
-                for (var i = 0; i < movies.length; i++) {
-                    if (movies[i].trackId == id) {
+                for (let i = 0; i < movies.length; i++) {
+                    if (movies[i].trackId === id) {
                         movies.splice(i, 1);
                         break;
                     }
@@ -84,7 +84,7 @@ class MoviesDetails extends Component {
     }
 
     render() {
-        var image = <View/>;
+        let image = <View/>;
 
         if (this.state.pushEvent) {
             if (this.state.pushEvent.artworkUrl100) {
