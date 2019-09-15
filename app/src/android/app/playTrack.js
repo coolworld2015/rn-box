@@ -33,9 +33,7 @@ class PlayTrack extends Component {
 
     render() {
         return (
-
             <View style={styles.container}>
-
                 <Video source={{uri: this.state.url}}
                        ref={(ref: Video) => {
                            this.video = ref
@@ -68,9 +66,7 @@ class PlayTrack extends Component {
                         </TouchableHighlight>
                     </View>
                 </View>
-
             </View>
-
         )
     }
 }
@@ -79,7 +75,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: 'white'
+        backgroundColor: 'black'
     },
     backgroundVideo: {
         position: 'absolute',

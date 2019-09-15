@@ -41,8 +41,17 @@ class PlayTrack extends Component {
 
     render() {
         return (
-
             <View style={styles.container}>
+                <View style={{
+                    position: 'absolute',
+                    top: 0,
+                    height: 100,
+                    width: 1000,
+                    backgroundColor: 'white'
+                }}>
+                    <Text style={styles.textSmall}>
+                    </Text>
+                </View>
 
                 <Video source={{uri: this.state.url}}
                        ref={(ref: Video) => {
@@ -50,7 +59,7 @@ class PlayTrack extends Component {
                        }}
                        style={styles.backgroundVideo}/>
 
-                 <View style={styles.header}>
+                <View style={styles.header}>
                     <View>
                         <TouchableHighlight
                             onPress={() => this.goBack()}
@@ -76,9 +85,7 @@ class PlayTrack extends Component {
                         </TouchableHighlight>
                     </View>
                 </View>
-
             </View>
-
         )
     }
 }
@@ -87,7 +94,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: 'white'
+        backgroundColor: 'black'
     },
     backgroundVideo: {
         position: 'absolute',
