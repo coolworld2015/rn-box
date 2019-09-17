@@ -188,8 +188,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         backgroundColor: 'darkblue',
-        borderWidth: 0,
-        borderColor: 'whitesmoke'
+        borderTopWidth: 1,
+        borderColor: 'white'
     },
     textSmall: {
         fontSize: 16,
