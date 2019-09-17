@@ -60,5 +60,5 @@ react-native link react-native-gesture-handler
 -------------------------------------------------------------------------------------------------
 cd ios && pod install && cd ..
 -------------------------------------------------------------------------------------------------
-APK -> android/app/build.gradle -> enableSeparateBuildPerCPUArchitecture = true
+APK -> android/app/build.gradle -> def enableSeparateBuildPerCPUArchitecture = true
 -------------------------------------------------------------------------------------------------
