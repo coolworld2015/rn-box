@@ -34,6 +34,7 @@ class Movies extends Component {
             positionY: 0,
             searchQuery: '',
             refreshing: false,
+            responseData: [],
             width: Dimensions.get('window').width
         };
         this.getItems();
